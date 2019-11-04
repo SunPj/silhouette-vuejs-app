@@ -21,3 +21,17 @@ dist
 
 #OS X
 .DS_Store
+
+#
+# VueJs
+#
+vui/node_modules
+vui/.DS_Store
+vui/dist
+# local env files
+vui/.env.local
+vui/.env.*.local
+# Log files
+vui/npm-debug.log*
+vui/yarn-debug.log*
+vui/yarn-error.log*
