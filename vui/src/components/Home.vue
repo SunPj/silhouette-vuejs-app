@@ -1,17 +1,11 @@
 <template>
-    <div class="hello">
-        <h1>This is homepage</h1>
-        <h2>{{msg}}</h2>
+    <div>
+        <h1 class="title is-1 has-text-centered">This is homepage</h1>
     </div>
 </template>
 
 <script>
     export default {
-        data() {
-            return {
-                msg: 'Hello World!'
-            }
-        }
     }
 </script>
 

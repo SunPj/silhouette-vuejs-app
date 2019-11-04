@@ -1,6 +1,6 @@
 <template>
-    <div class="hello">
-        <h1>Todo</h1>
+    <div>
+        <h1 class="title is-2">Todo</h1>
         <ol type="1">
             <li>Social auth</li>
             <li>DB integration</li>
