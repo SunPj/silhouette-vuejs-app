@@ -2,8 +2,6 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-GET         /                                com.tuplejump.playYeoman.Yeoman.index
-
 GET         /user                            controllers.ApplicationController.user
 GET         /signOut                         controllers.ApplicationController.signOut
 POST        /signIn                          controllers.SignInController.submit
@@ -16,5 +14,3 @@ GET         /views/$template<.+>.html        controllers.ApplicationController.v
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                    controllers.Assets.at(path="/public", file)
-
-->          /                                yeoman.Routes

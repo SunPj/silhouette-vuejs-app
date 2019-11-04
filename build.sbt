@@ -1,4 +1,3 @@
-import com.tuplejump.sbt.yeoman.Yeoman
 import com.typesafe.sbt.SbtScalariform._
 
 import scalariform.formatter.preferences._
@@ -27,7 +26,7 @@ libraryDependencies ++= Seq(
   filters
 )
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala, Yeoman)
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 routesGenerator := InjectedRoutesGenerator
 
