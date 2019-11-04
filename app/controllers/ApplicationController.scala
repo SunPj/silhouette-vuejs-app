@@ -1,12 +1,13 @@
 package controllers
 
 import javax.inject.Inject
-
 import com.mohiva.play.silhouette.api.{ LogoutEvent, Silhouette }
 import com.mohiva.play.silhouette.impl.providers.SocialProviderRegistry
+import play.api.http.ContentTypes
 import play.api.i18n.{ I18nSupport, MessagesApi }
 import play.api.libs.json.Json
 import play.api.mvc.Controller
+import services.IndexRenderService
 import utils.auth.DefaultEnv
 
 import scala.concurrent.Future
@@ -20,9 +21,18 @@ import scala.concurrent.Future
  */
 class ApplicationController @Inject() (
   val messagesApi: MessagesApi,
+  indexRenderService: IndexRenderService,
   silhouette: Silhouette[DefaultEnv],
   socialProviderRegistry: SocialProviderRegistry)
   extends Controller with I18nSupport {
+
+  /**
+   * @return vuejs index.html page with CSRF set
+   */
+  def vueapp(path: String) = silhouette.UserAwareAction { implicit req =>
+    val html = indexRenderService.render(Some("SafeLoan"))
+    Ok(html).as(ContentTypes.HTML)
+  }
 
   /**
    * Returns the user.
