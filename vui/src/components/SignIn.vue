@@ -3,6 +3,10 @@
         <div class="column col-lg-offset-3 col-lg-6">
             <h3 class="title is-3">Sign in</h3>
             <form>
+                <div class="notification is-danger" v-if="backendError !== null && !$v.$anyDirty">
+                    {{backendError}}
+                </div>
+
                 <div class="field">
                     <label class="label">Email</label>
                     <input class="input"
@@ -51,7 +55,8 @@
             return {
                 email: "",
                 password: "",
-                rememberMe: false
+                rememberMe: false,
+                backendError: null
             }
         },
         validations: {
@@ -78,7 +83,12 @@
                         this.$emit('loggedIn', userData)
                         this.$router.push('/profile')
                     }).catch(function (error) {
-                        console.error(error.response);
+                        if (error.data && error.data.message) {
+                            this.$v.$reset();
+                            this.backendError = error.data.message;
+                        } else {
+                            console.error(error);
+                        }
                     });
                 }
             }
