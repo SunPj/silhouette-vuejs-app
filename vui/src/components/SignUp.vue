@@ -105,7 +105,7 @@
                     const userData = response.data
                     this.setUser(userData)
                     this.$emit('loggedIn', userData)
-                    this.$router.push('/profile')
+                    this.$router.push({ path: '/signin', query: {message: 'activateEmail'} })
                 }).catch(error => {
                     if (error.data && error.data.message) {
                         this.$v.$reset();
