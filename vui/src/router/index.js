@@ -1,8 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../components/Home.vue'
+import ErrorPage from '../components/ErrorPage.vue'
 import SignIn from '../components/SignIn.vue'
 import SignUp from '../components/SignUp.vue'
+import ChangePasswordPage from '../components/ChangePasswordPage.vue'
+import ForgotPasswordPage from '../components/ForgotPasswordPage.vue'
+import ResetPasswordPage from '../components/ResetPasswordPage.vue'
 import UserProfile from '../components/UserProfile.vue'
 import Todo from '../components/Todo.vue'
 import Done from '../components/Done.vue'
@@ -17,9 +21,38 @@ const routes = [
         component: Home
     },
     {
+        path: '/error',
+        name: 'error',
+        props: (route) => ({
+            message : route.query.message
+        }),
+        component: ErrorPage
+    },
+    {
         path: '/todo',
         name: 'todo',
         component: Todo
+    },
+    {
+        path: '/change-password',
+        name: 'change-password',
+        component: ChangePasswordPage,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: '/reset-password',
+        name: 'reset-password',
+        props: (route) => ({
+            token: route.query.token
+        }),
+        component: ResetPasswordPage
+    },
+    {
+        path: '/forgot-password',
+        name: 'forgot-password',
+        component: ForgotPasswordPage
     },
     {
         path: '/done',
@@ -30,6 +63,10 @@ const routes = [
         path: '/signin',
         name: 'signin',
         component: SignIn,
+        props: (route) => ({
+            redirectTo: route.query.redirectTo,
+            message : route.query.message
+        }),
         meta: {
             guest: true
         }
@@ -64,6 +101,7 @@ router.beforeEach((to, from, next) => {
         if (!isAuthorized) {
             next({
                 path: '/signin',
+                query: {message: 'authenticationRequired', redirectTo: to.fullPath},
                 params: {nextUrl: to.fullPath}
             })
         } else {

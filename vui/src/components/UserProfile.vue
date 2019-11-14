@@ -1,6 +1,7 @@
 <template>
     <div class="hello">
         <h1 class="title is-1">Welcome to regular users page</h1>
+        <p>Here you can <router-link to="/change-password">change your password</router-link></p>
     </div>
 </template>
 <script>

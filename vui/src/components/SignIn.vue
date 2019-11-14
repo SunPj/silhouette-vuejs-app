@@ -3,8 +3,8 @@
         <div class="column col-lg-offset-3 col-lg-6">
             <h3 class="title is-3">Sign in</h3>
             <form>
-                <div class="notification is-danger" v-if="backendError !== null && !$v.$anyDirty">
-                    {{backendError}}
+                <div class="notification" :class="notification.type" v-if="this.notification.text">
+                    {{this.notification.text}}
                 </div>
 
                 <div class="field">
@@ -36,10 +36,13 @@
                         </label>
                     </div>
                 </div>
-                <div class="field">
+                <div class="field is-grouped">
                     <p class="control">
                         <button class="button is-success" :disabled="$v.$invalid" @click="handleSubmit">Submit</button>
                     </p>
+                    <div class="has-text-right">
+                        <router-link class="button is-warning" to="/forgot-password">I forgot my password</router-link>
+                    </div>
                 </div>
             </form>
         </div>
@@ -51,12 +54,16 @@
     import { required, email } from 'vuelidate/lib/validators'
 
     export default {
+        props: ['redirectTo', 'message'],
         data() {
             return {
                 email: "",
                 password: "",
                 rememberMe: false,
-                backendError: null
+                notification: {
+                    type: '',
+                    text: ''
+                }
             }
         },
         validations: {
@@ -85,12 +92,31 @@
                     }).catch(function (error) {
                         if (error.data && error.data.message) {
                             this.$v.$reset();
-                            this.backendError = error.data.message;
+                            this.notification.type = 'is-danger';
+                            this.notification.text = error.data.message;
                         } else {
                             console.error(error);
                         }
                     });
                 }
+            }
+        },
+        created() {
+            if (this.message === 'passwordChanged') {
+                this.notification.type = 'is-success';
+                this.notification.text = 'Password has been changed. Please use your email and new password to sign in'
+            } else if (this.message === 'emailVerified') {
+                this.notification.type = 'is-success';
+                this.notification.text = 'Email has been verified successfully. Please use your email, password to sign in'
+            } else if (this.message === 'sessionExpired') {
+                this.notification.type = 'is-info';
+                this.notification.text = 'Session is expired. Please sign in'
+            } else if (this.message === 'activateEmail') {
+                this.notification.type = 'is-info';
+                this.notification.text = 'Please activate your account using the link we have sent to your email. You can sign in then.'
+            } else if (this.message === 'authenticationRequired') {
+                this.notification.type = 'is-warning';
+                this.notification.text = 'Please sign in to get access to page'
             }
         }
     }

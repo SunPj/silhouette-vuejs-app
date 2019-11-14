@@ -1,14 +1,13 @@
-package services
+package models.services
 
 import javax.inject.Inject
 import play.api.mvc.RequestHeader
 import play.filters.csrf.CSRF
 import play.filters.csrf.CSRF.Token
 
-import scala.concurrent.ExecutionContext
 import scala.io.Source
 
-class IndexRenderService @Inject() ()(implicit ec: ExecutionContext) {
+class IndexRenderService @Inject() () {
 
   def render(title: Option[String] = None, meta: Seq[(String, String)] = Seq.empty)(implicit request: RequestHeader): String = {
     val Token(name, value) = CSRF.getToken.get

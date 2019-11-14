@@ -29,7 +29,7 @@ Vue.http.interceptors.push(function(request) {
 
     const jwt = store.getters["user/getToken"];
     if (jwt) {
-        request.headers.set('X-Auth', jwt);
+        request.headers.set('X-Auth-Token', jwt);
     }
 
     return function(response){
