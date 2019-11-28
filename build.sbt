@@ -1,7 +1,7 @@
 import play.sbt.routes.RoutesKeys
 RoutesKeys.routesImport := Seq.empty
 
-name := "play-silhouette-angular-seed"
+name := "play-silhouette-vuejs"
 
 version := "4.0.0"
 

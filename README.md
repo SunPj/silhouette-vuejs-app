@@ -1,6 +1,9 @@
 Play Silhouette VueJs Project
 =====================================
 
+## Demo
+[Demo on Heroku](https://vuejs-slihouette.herokuapp.com/)
+
 ## How to run the project
 
 1. Run backend 
