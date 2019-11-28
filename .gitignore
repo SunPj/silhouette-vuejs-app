@@ -1,6 +1,7 @@
 logs
 project/project
 project/target
+conf/devEnv.conf
 target
 tmp
 .history
