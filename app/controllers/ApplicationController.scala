@@ -5,13 +5,15 @@ import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.{LogoutEvent, Silhouette}
 import javax.inject.Inject
 import models.services.IndexRenderService
+import play.api.{Environment, Mode}
 import play.api.http.ContentTypes
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
-import play.api.mvc.{AbstractController, AnyContent, ControllerComponents}
+import play.api.libs.ws.WSClient
+import play.api.mvc._
 import utils.auth.DefaultEnv
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * The basic application controller.
@@ -21,16 +23,28 @@ import scala.concurrent.Future
   */
 class ApplicationController @Inject()(components: ControllerComponents,
                                       silhouette: Silhouette[DefaultEnv],
+                                      environment: Environment,
+                                      ws: WSClient,
                                       indexRenderService: IndexRenderService,
-                                      authInfoRepository: AuthInfoRepository)
+                                      authInfoRepository: AuthInfoRepository)(implicit ec: ExecutionContext)
   extends AbstractController(components) with I18nSupport {
 
   /**
     * @return vuejs index.html page with CSRF set
     */
-  def vueapp(path: String) = silhouette.UserAwareAction { implicit req =>
-    val html = indexRenderService.render(Some("SafeLoan"))
-    Ok(html).as(ContentTypes.HTML)
+  def vueapp(path: String) = silhouette.UserAwareAction.async { implicit req =>
+    environment.mode match {
+      case Mode.Dev =>
+        ws.url(s"http://localhost:8080/$path").get().map{ r =>
+          new Status(r.status)(r.bodyAsBytes.utf8String).as(r.contentType)
+        }
+      case _ =>
+        Future.successful{
+          val html = indexRenderService.render(Some("SafeLoan"))
+          Ok(html).as(ContentTypes.HTML)
+        }
+    }
+
   }
 
   /**

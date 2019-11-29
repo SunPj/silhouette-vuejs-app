@@ -3,6 +3,9 @@ const path = require("path");
 module.exports = {
     outputDir: path.resolve(__dirname, "../public"),
     devServer: {
-        proxy: 'http://localhost:9000'
+        public: 'localhost:8080',
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        }
     }
 }
