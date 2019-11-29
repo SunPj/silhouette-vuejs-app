@@ -14,6 +14,7 @@ GET         /account/email/:email            controllers.ActivateAccountControll
 GET         /account/activate/:token         controllers.ActivateAccountController.activate(token: java.util.UUID)
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file                    controllers.Assets.at(path="/public", file)
+GET         /css/*file              controllers.Assets.at(path="/public/ui/css", file)
+GET         /js/*file               controllers.Assets.at(path="/public/ui/js", file)
 
-GET         /$any<.*>                        controllers.ApplicationController.vueapp(any)
+GET         /$any<.*>                  controllers.ApplicationController.vueapp(any)

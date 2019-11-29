@@ -1,18 +1,10 @@
 {
-  "name": "play-silhouette-angular-seed",
-  "version": "0.0.0",
-  "dependencies": {
-    "grunt-cli": "~1.2.0",
-    "bower": "~1.7.9"
-  },
-  "devDependencies": {
-    "grunt-wiredep": "^3.0.1",
-    "yo": "~1.7.0"
-  },
+  "name": "play-silhouette-vuejs",
+  "version": "0.0.1",
   "engines": {
-    "node": "5.10.x"
+    "node": "9.5.x"
   },
   "scripts": {
-    "postinstall": "cd ui && npm install && bower install && grunt build"
+    "postinstall": "cd vui && npm install && npm run build"
   }
 }
