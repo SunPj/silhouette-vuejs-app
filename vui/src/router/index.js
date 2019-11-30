@@ -9,7 +9,7 @@ import ForgotPasswordPage from '../components/ForgotPasswordPage.vue'
 import ResetPasswordPage from '../components/ResetPasswordPage.vue'
 import UserProfile from '../components/UserProfile.vue'
 import Todo from '../components/Todo.vue'
-import Done from '../components/Done.vue'
+import About from '../components/About.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -55,9 +55,9 @@ const routes = [
         component: ForgotPasswordPage
     },
     {
-        path: '/done',
-        name: 'done',
-        component: Done
+        path: '/about',
+        name: 'about',
+        component: About
     },
     {
         path: '/signin',

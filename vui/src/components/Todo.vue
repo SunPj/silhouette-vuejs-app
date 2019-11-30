@@ -2,10 +2,9 @@
     <div>
         <h1 class="title is-2">Todo</h1>
         <ol type="1">
-            <li>Social auth</li>
-            <li>DB integration</li>
-            <li>Password confirmation input on sign up form</li>
-            <li>Move user data from localstorage to vuex</li>
+            <li>Integration Silholuette's social auth</li>
+            <li>Test heroku autodeployment</li>
+            <li>User management page for admin</li>
         </ol>
     </div>
 </template>
