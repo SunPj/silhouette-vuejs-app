@@ -1,21 +1,13 @@
 <template>
   <div class="navbar-end">
     <div class="navbar-item">
-      <div class="field is-grouped" v-if="authorized">
-        <p class="control">
-          <a class="bd-tw-button button" @click="logout()">Logout</a>
-        </p>
-        <p class="control" >
-          <router-link to="/profile"><span class="icon"><font-awesome-icon icon="user"/></span></router-link>
-        </p>
+      <div class="buttons" v-if="authorized">
+        <router-link to="/profile" class="is-link"><span class="icon"><font-awesome-icon icon="user"/></span></router-link>
+        <a class="bd-tw-button button" @click="logout()">Logout</a>
       </div>
-      <div class="field is-grouped" v-else>
-        <p class="control">
-          <router-link to="/signup" class="button is-primary">SignUp</router-link>
-        </p>
-        <p class="control" >
-          <router-link to="/signin" class="button is-light">SignIn</router-link>
-        </p>
+      <div class="buttons" v-else>
+        <router-link to="/signup" class="button is-primary">SignUp</router-link>
+        <router-link to="/signin" class="button is-light">SignIn</router-link>
       </div>
     </div>
   </div>
