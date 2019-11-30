@@ -1,8 +1,9 @@
 Play Silhouette VueJs Project
 =====================================
 
-## Demo
-[Demo on Heroku](https://vuejs-slihouette.herokuapp.com/)
+## Demo app
+See [Demo on Heroku](https://vuejs-slihouette.herokuapp.com/). Loading can take a while because it uses Heroku free dyno which is turned on/off every time 
+if there is no activity for some time. 
 
 ## How to run the project
 
@@ -10,8 +11,11 @@ Play Silhouette VueJs Project
 `sbt run`
 
 ## Documentation
-Backend and frontend parts of app are completely separate. Backend part proxies views to frontend and frontend proxies all
-api calls to backend.   
+Backend and frontend parts of app are completely separate. 
+
+### VueJs 
+On running application in `prod` mode, all VueJs sources are compiled and moved to `public` directory where PlayFramework treats them as static assets.
+On running application in `dev` mode, all VueJs sources are proxied from Webpack server by PlayFramework, so hot reloading and other stuff work without magic.
 
 ### Backend
 To run backend you should have `sbt` installed. 
