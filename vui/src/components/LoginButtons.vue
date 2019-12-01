@@ -2,7 +2,7 @@
   <div class="navbar-end">
     <div class="navbar-item">
       <div class="buttons" v-if="authorized">
-        <router-link to="/profile" class="is-link"><span class="icon"><font-awesome-icon icon="user"/></span></router-link>
+        <router-link to="/profile" class="is-link" style="margin-right: 15px"><span class="icon"><font-awesome-icon icon="user"/></span></router-link>
         <a class="bd-tw-button button" @click="logout()">Logout</a>
       </div>
       <div class="buttons" v-else>
