@@ -10,13 +10,16 @@ import scala.io.Source
 class IndexRenderService @Inject() () {
 
   def render(title: Option[String] = None, meta: Seq[(String, String)] = Seq.empty)(implicit request: RequestHeader): String = {
-    val Token(name, value) = CSRF.getToken.get
-
     val metaTags = title.map(t => s"<title>$t</title>").getOrElse("") +
       meta.map { case (n, c) => s"""<meta name="$n" content="$c">""" }.mkString("")
 
-    Source.fromFile("public/ui/index.html").mkString
-      .replace("csrf-token-value=\"\"", s"csrf-token-value='$value'")
-      .replace("</head>", s"$metaTags</head>")
+    val html = Source.fromFile("public/ui/index.html").mkString
+    setCsrfToken(html).replace("</head>", s"$metaTags</head>")
+  }
+
+  def setCsrfToken(html: String)(implicit request: RequestHeader): String = {
+    val Token(_, value) = CSRF.getToken.get
+
+    html.replace("csrf-token-value=\"\"", s"csrf-token-value='$value'")
   }
 }

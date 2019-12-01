@@ -35,16 +35,10 @@ class ApplicationController @Inject()(components: ControllerComponents,
   def vueapp(path: String) = silhouette.UserAwareAction.async { implicit req =>
     environment.mode match {
       case Mode.Dev =>
-        ws.url(s"http://localhost:8080/$path").get().map{ r =>
-          new Status(r.status)(r.bodyAsBytes.utf8String).as(r.contentType)
-        }
+        fetchWebpackServer(path)
       case _ =>
-        Future.successful{
-          val html = indexRenderService.render(Some("SafeLoan"))
-          Ok(html).as(ContentTypes.HTML)
-        }
+        renderIndexPage()
     }
-
   }
 
   /**
@@ -64,5 +58,37 @@ class ApplicationController @Inject()(components: ControllerComponents,
   def signOut = silhouette.SecuredAction.async { implicit request: SecuredRequest[DefaultEnv, AnyContent] =>
     silhouette.env.eventBus.publish(LogoutEvent(request.identity, request))
     silhouette.env.authenticatorService.discard(request.authenticator, Ok)
+  }
+
+  /**
+    * Retrieves resource from WebPack server. CSRF token will be injected to HTML files.
+    *
+    * @param path    HTTP resource path
+    * @param request HTTP request
+    * @return
+    */
+  private def fetchWebpackServer(path: String)(implicit request: RequestHeader) = {
+    ws.url(s"http://localhost:8080/$path").get().map { r =>
+      if (r.contentType.equalsIgnoreCase(HTML(Codec.utf_8))) {
+        val html = r.bodyAsBytes.utf8String
+
+        Ok(indexRenderService.setCsrfToken(html)).as(ContentTypes.HTML)
+      } else {
+        new Status(r.status)(r.bodyAsBytes).as(r.contentType)
+      }
+    }
+  }
+
+  /**
+    * Renders index page by injecting CSRF token
+    *
+    * @param request HTTP request
+    * @return
+    */
+  private def renderIndexPage()(implicit request: RequestHeader) = {
+    Future.successful {
+      val html = indexRenderService.render(Some("Scala PlayFramework authentication and user management sample using Silhouette VueJs"))
+      Ok(html).as(ContentTypes.HTML)
+    }
   }
 }
