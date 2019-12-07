@@ -8,7 +8,6 @@ import models.services.IndexRenderService
 import play.api.{Environment, Mode}
 import play.api.http.ContentTypes
 import play.api.i18n.I18nSupport
-import play.api.libs.json.Json
 import play.api.libs.ws.WSClient
 import play.api.mvc._
 import utils.auth.DefaultEnv
@@ -39,15 +38,6 @@ class ApplicationController @Inject()(components: ControllerComponents,
       case _ =>
         renderIndexPage()
     }
-  }
-
-  /**
-    * Returns the user.
-    *
-    * @return The result to display.
-    */
-  def user = silhouette.SecuredAction.async { implicit request =>
-    Future.successful(Ok(Json.toJson(request.identity)))
   }
 
   /**
