@@ -52,7 +52,8 @@ abstract class AbstractAuthController(silhouette: Silhouette[DefaultEnv],
           "token" -> token,
           "firstName" -> user.firstName,
           "lastName" -> user.lastName,
-          "roleId" -> user.roleId
+          "role" -> user.role,
+          "email" -> user.email
         )))
       }
     }

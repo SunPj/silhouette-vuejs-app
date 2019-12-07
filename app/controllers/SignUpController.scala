@@ -9,7 +9,7 @@ import services.AvatarService
 import com.mohiva.play.silhouette.api.util.PasswordHasherRegistry
 import com.mohiva.play.silhouette.impl.providers._
 import forms.SignUpForm
-import models.User
+import models.{User, UserRoles}
 import models.services.{AuthTokenService, MailService, UserService}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
@@ -62,7 +62,7 @@ class SignUpController @Inject()(components: ControllerComponents,
               email = Some(data.email),
               avatarURL = None,
               activated = false,
-              None
+              role = UserRoles.User
             )
             for {
               avatar <- avatarService.retrieveURL(data.email)

@@ -1,10 +1,11 @@
 package models.daos
 
+import java.time.ZonedDateTime
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import javax.inject.Inject
-import models.User
+import models.{User, UserRoles}
 import play.api.db.slick.DatabaseConfigProvider
 
 import scala.concurrent.ExecutionContext
@@ -29,7 +30,7 @@ class UserDAOImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
     } yield dbUser
     db.run(userQuery.result.headOption).map { dbUserOption =>
       dbUserOption.map { user =>
-        User(user.userID, loginInfo, user.firstName, user.lastName, user.email, user.avatarURL, user.activated, Some(user.roleId))
+        User(user.userID, loginInfo, user.firstName, user.lastName, user.email, user.avatarURL, user.activated, UserRoles(user.roleId))
       }
     }
   }
@@ -56,7 +57,7 @@ class UserDAOImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
             user.email,
             user.avatarURL,
             user.activated,
-            Some(user.roleId))
+            UserRoles(user.roleId))
       }
     }
   }
@@ -85,7 +86,7 @@ class UserDAOImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
     // combine database actions to be run sequentially
     val actions = (for {
       userRoleId <- userRoleDAO.getUserRole()
-      dbUser = DBUser(user.userID, user.firstName, user.lastName, user.email, user.avatarURL, user.activated, userRoleId)
+      dbUser = DBUser(user.userID, user.firstName, user.lastName, user.email, user.avatarURL, user.activated, userRoleId, ZonedDateTime.now())
       _ <- slickUsers.insertOrUpdate(dbUser)
       loginInfo <- loginInfoAction
       _ <- slickUserLoginInfos += DBUserLoginInfo(dbUser.userID, loginInfo.id.get)

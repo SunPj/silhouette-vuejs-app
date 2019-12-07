@@ -36,9 +36,12 @@ trait DBTableDefinitions {
                     email: Option[String],
                     avatarURL: Option[String],
                     activated: Boolean,
-                    roleId: Int)
+                    roleId: Int,
+                    signedUpAt: ZonedDateTime)
 
   class Users(tag: Tag) extends Table[DBUser](tag, Some("auth"), "user") {
+    import MyPostgresProfile.api._
+
     def id = column[UUID]("id", O.PrimaryKey)
     def firstName = column[Option[String]]("first_name")
     def lastName = column[Option[String]]("last_name")
@@ -46,7 +49,8 @@ trait DBTableDefinitions {
     def avatarURL = column[Option[String]]("avatar_url")
     def activated = column[Boolean]("activated")
     def roleId = column[Int]("role_id")
-    def * = (id, firstName, lastName, email, avatarURL, activated, roleId) <> (DBUser.tupled, DBUser.unapply)
+    def signedUpAt = column[ZonedDateTime]("signed_up_at")
+    def * = (id, firstName, lastName, email, avatarURL, activated, roleId, signedUpAt) <> (DBUser.tupled, DBUser.unapply)
   }
 
   case class DBLoginInfo(
@@ -138,4 +142,3 @@ trait DBTableDefinitions {
     slickLoginInfos.filter(dbLoginInfo => dbLoginInfo.providerID === loginInfo.providerID && dbLoginInfo.providerKey === loginInfo.providerKey)
 
 }
-

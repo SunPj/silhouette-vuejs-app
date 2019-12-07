@@ -3,7 +3,6 @@ package models
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.{ Identity, LoginInfo }
-import play.api.libs.json.Json
 
 /**
   * The user object.
@@ -15,7 +14,7 @@ import play.api.libs.json.Json
   * @param email     Maybe the email of the authenticated provider.
   * @param avatarURL Maybe the avatar URL of the authenticated provider.
   * @param activated Indicates that the user has activated its registration.
-  * @param roleId    The unique ID of the user roles
+  * @param role      user role
   */
 case class User(userID: UUID,
                 loginInfo: LoginInfo,
@@ -24,15 +23,4 @@ case class User(userID: UUID,
                 email: Option[String],
                 avatarURL: Option[String],
                 activated: Boolean,
-                roleId: Option[Int]) extends Identity
-
-/**
- * The companion object.
- */
-object User {
-
-  /**
-   * Converts the [User] object to Json and vice versa.
-   */
-  implicit val jsonFormat = Json.format[User]
-}
+                role: UserRoles.UserRole) extends Identity
