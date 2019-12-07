@@ -2,7 +2,8 @@
   <div class="navbar-end">
     <div class="navbar-item">
       <div class="buttons" v-if="authorized">
-        <router-link to="/profile" class="is-link" style="margin-right: 15px"><span class="icon"><font-awesome-icon icon="user"/></span></router-link>
+        <router-link to="/profile" class="is-link" style="margin-right: 15px" title="Profile page"><span class="icon"><font-awesome-icon icon="user"/></span></router-link>
+        <router-link v-if="adminUser" to="/admin/user" class="is-link" style="margin-right: 15px" title="Admin page"><span class="icon"><font-awesome-icon icon="cog"/></span></router-link>
         <a class="bd-tw-button button" @click="logout()">Logout</a>
       </div>
       <div class="buttons" v-else>
@@ -18,7 +19,7 @@
   export default {
     name: 'LoginButtons',
     methods: {
-      ...mapGetters('user', ['isAuthorized']),
+      ...mapGetters('user', ['isAuthorized', 'isAdmin']),
       ...mapActions('user', ['setUser']),
       logout: function() {
         this.$http.get('/signOut')
@@ -29,6 +30,9 @@
     computed: {
       authorized: function() {
         return this.isAuthorized();
+      },
+      adminUser: function() {
+        return this.isAdmin();
       }
     }
   }

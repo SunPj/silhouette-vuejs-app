@@ -4,7 +4,10 @@ const state = {
 
 const getters = {
   getToken: state => state.user.token,
-  isAuthorized: state => state.user.hasOwnProperty('token')
+  getUser: state => state.user,
+  getRole: state => state.user ? state.user.role : null,
+  isAuthorized: state => state.user.hasOwnProperty('token'),
+  isAdmin: state => state.user ? (state.user.role === 'Admin'):false
 };
 
 const actions = {
