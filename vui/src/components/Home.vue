@@ -11,6 +11,7 @@
                 <li>Reset password</li>
                 <li>Change password</li>
                 <li>SPA</li>
+                <li>Basic user management functionality (admin page, user roles)</li>
             </ul>
 
             <h3 class="is-3">Backend technical details:</h3>
