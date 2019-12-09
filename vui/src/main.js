@@ -6,11 +6,12 @@ import VueResource from 'vue-resource'
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import Vuelidate from 'vuelidate'
 
-library.add(fas)
+library.add(fas, fab)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
@@ -19,6 +20,7 @@ Vue.use(Vuelidate)
 
 Vue.use(VueResource);
 Vue.use(Buefy, {
+    defaultIconComponent: 'font-awesome-icon',
     defaultIconPack: 'fa'
 });
 
