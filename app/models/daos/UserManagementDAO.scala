@@ -9,6 +9,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import utils.{GridRequest, GridResponse, SlickGridQuerySupport}
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.matching.Regex
 
 class UserManagementDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends DAOSlick with SlickGridQuerySupport {
   /**
@@ -59,7 +60,7 @@ class UserManagementDAO @Inject() (protected val dbConfigProvider: DatabaseConfi
             u.userID,
             u.firstName,
             u.lastName,
-            u.email,
+            u.email.map(maskEmail),
             u.roleId,
             u.activated,
             u.signedUpAt,
@@ -70,6 +71,15 @@ class UserManagementDAO @Inject() (protected val dbConfigProvider: DatabaseConfi
       }
 
       gridResponse.copy(data = userManagementModelData)
+    }
+  }
+
+  private val emailMaskingPattern: Regex = "^(.{3}).*@.*(.{5})$".r
+
+  private def maskEmail(email: String) = {
+    email match {
+      case emailMaskingPattern(prefix, postfix) => s"$prefix...@...$postfix"
+      case _ => email
     }
   }
 }
