@@ -78,6 +78,7 @@ class UserManagementDAO @Inject() (protected val dbConfigProvider: DatabaseConfi
 
   private def maskEmail(email: String) = {
     email match {
+      case "admin@sunsongs.ru" => email
       case emailMaskingPattern(prefix, postfix) => s"$prefix...@...$postfix"
       case _ => email
     }

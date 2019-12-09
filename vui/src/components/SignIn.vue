@@ -7,6 +7,10 @@
         <div class="card-content">
             <div class="content">
                 <form>
+                    <div class="notification" :class="success">
+                        Use email: <code>admin@sunsongs.ru</code> and <code>password: 12345</code> to login as admin
+                    </div>
+
                     <div class="notification" :class="notification.type" v-if="this.notification.text">
                         {{this.notification.text}}
                     </div>

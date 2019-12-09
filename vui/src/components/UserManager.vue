@@ -46,12 +46,14 @@
 
           <b-table-column field="role" label="Role" centered sortable>
             <user-role-edit
+                    v-if="props.row.email !== 'admin@sunsongs.ru'"
                     :user-id="props.row.id"
                     :roles="roles"
                     :current-role-id="props.row.roleId"
                     :key="props.row.id"
                     @role-change="(roleId) => props.row.roleId = roleId">
             </user-role-edit>
+            <span v-else>Admin (reserved for demo)</span>
           </b-table-column>
 
           <b-table-column field="source" label="Source" centered>
