@@ -8,7 +8,7 @@ import javax.inject.Inject
 import models.{User, UserRoles}
 import play.api.db.slick.DatabaseConfigProvider
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
  * Give access to the user object.
@@ -93,5 +93,16 @@ class UserDAOImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
     } yield ()).transactionally
     // run actions and return user afterwards
     db.run(actions).map(_ => user)
+  }
+
+  /**
+    * Updates user role
+    *
+    * @param userId user id
+    * @param role   user role to update to
+    * @return
+    */
+  override def updateUserRole(userId: UUID, role: UserRoles.UserRole): Future[Boolean] = {
+    db.run(slickUsers.filter(_.id === userId).map(_.roleId).update(role.id)).map(_ > 0)
   }
 }

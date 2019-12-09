@@ -56,8 +56,9 @@
 
           <b-table-column field="source" label="Source" centered>
             <font-awesome-icon title="Credentials" style="margin-left: 5px" icon="at" v-if="props.row.credentialsProvider"/>
-            <font-awesome-icon title="Facebook" style="margin-left: 5px" :icon="['fab', 'facebook-f']" v-if="props.row.facebookProvider"/>
-            <font-awesome-icon title="Google" style="margin-left: 5px" :icon="['fab', 'google']" v-if="props.row.googleProvider"/>
+            <font-awesome-icon title="Facebook" style="margin-left: 5px" :icon="['fab', 'facebook-square']" v-if="props.row.facebookProvider"/>
+            <font-awesome-icon title="Google" style="margin-left: 5px" :icon="['fab', 'google-plus-square']" v-if="props.row.googleProvider"/>
+            <font-awesome-icon title="Twitter" style="margin-left: 5px" :icon="['fab', 'twitter-square']" v-if="props.row.twitterProvider"/>
           </b-table-column>
 
           <b-table-column field="signedUpAt" label="Signed Up" sortable numeric>
@@ -140,5 +141,8 @@
     }
 </script>
 
-<style>
+<style scoped>
+  .table-wrapper td {
+    vertical-align: middle;
+  }
 </style>

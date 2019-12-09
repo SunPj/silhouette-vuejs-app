@@ -72,4 +72,14 @@ class UserServiceImpl @Inject()(userDAO: UserDAO)(implicit ec: ExecutionContext)
     */
   override def retrieve(id: UUID): Future[Option[User]] = userDAO.find(id)
 
+  /**
+    * Changes role of user
+    *
+    * @param userId user id
+    * @param role   role to assign to user
+    * @return
+    */
+  override def changeUserRole(userId: UUID, role: UserRoles.Value): Future[Boolean] = {
+    userDAO.updateUserRole(userId, role)
+  }
 }

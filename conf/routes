@@ -13,6 +13,14 @@ POST        /password/change                 controllers.ChangePasswordControlle
 GET         /account/email/:email            controllers.ActivateAccountController.send(email: String)
 GET         /account/activate/:token         controllers.ActivateAccountController.activate(token: java.util.UUID)
 
+### User management
+# Returns a list of all availalble user roles
+GET         /api/user/role                       controllers.UserManagerController.userRoles()
+# Changes role for user by id
+POST        /api/user/:userId/role               controllers.UserManagerController.changeUserRole(userId: java.util.UUID)
+# Returns a list of users
+GET         /api/user                            controllers.UserManagerController.users()
+
 # Map static resources from the /public folder to the /assets URL path
 GET         /static/*file              controllers.Assets.at(path="/public/ui/static", file)
 

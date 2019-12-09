@@ -4,7 +4,7 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.services.IdentityService
 import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
-import models.User
+import models.{User, UserRoles}
 
 import scala.concurrent.Future
 
@@ -12,6 +12,14 @@ import scala.concurrent.Future
   * Handles actions to users.
   */
 trait UserService extends IdentityService[User] {
+  /**
+    * Changes role of user
+    *
+    * @param userId user id
+    * @param role   role to assign to user
+    * @return
+    */
+  def changeUserRole(userId: UUID, role: UserRoles.Value): Future[Boolean]
 
   /**
     * Retrieves a user that matches the specified ID.
