@@ -1,5 +1,7 @@
 <template>
     <div class="columns card">
+        <b-loading :active.sync="loading"></b-loading>
+
         <div class="column col-lg-offset-3 col-lg-6">
             <h3 class="title is-3">Sign in</h3>
             <form>
@@ -57,6 +59,7 @@
         props: ['redirectTo', 'message'],
         data() {
             return {
+                loading: false,
                 email: "",
                 password: "",
                 rememberMe: false,
@@ -80,16 +83,19 @@
             handleSubmit(e) {
                 e.preventDefault()
                 if (this.password.length > 0) {
+                    this.loading = true;
                     this.$http.post('/signIn', {
                         email: this.email,
                         password: this.password,
                         rememberMe: this.rememberMe
                     }).then(response => {
+                        this.loading = false;
                         const userData = response.data
                         this.setUser(userData)
                         this.$emit('loggedIn', userData)
                         this.$router.push('/profile')
                     }).catch(function (error) {
+                        this.loading = false;
                         if (error.data && error.data.message) {
                             this.$v.$reset();
                             this.notification.type = 'is-danger';

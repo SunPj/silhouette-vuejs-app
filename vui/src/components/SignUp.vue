@@ -1,5 +1,7 @@
 <template>
     <div class="columns card">
+        <b-loading :active.sync="loading"></b-loading>
+
         <div class="column col-lg-offset-3 col-lg-6">
             <h3 class="title is-3">Sign up</h3>
             <form>
@@ -67,6 +69,7 @@
     export default {
         data() {
             return {
+                loading: false,
                 firstName: "",
                 lastName: "",
                 email: "",
@@ -96,17 +99,20 @@
             ...mapActions('user', ['setUser']),
             handleSubmit(e) {
                 e.preventDefault();
+                this.loading = true;
                 this.$http.post("/signUp", {
                     firstName: this.firstName,
                     lastName: this.lastName,
                     email: this.email,
                     password: this.password
                 }).then(response => {
+                    this.loading = false;
                     const userData = response.data
                     this.setUser(userData)
                     this.$emit('loggedIn', userData)
                     this.$router.push({ path: '/signin', query: {message: 'activateEmail'} })
                 }).catch(error => {
+                    this.loading = false;
                     if (error.data && error.data.message) {
                         this.$v.$reset();
                         this.backendError = error.data.message;
