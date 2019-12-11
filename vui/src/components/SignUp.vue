@@ -6,7 +6,12 @@
             <h3 class="title is-3">Sign up</h3>
             <form>
                 <div class="notification is-danger" v-if="backendError !== null && !$v.$anyDirty">
-                    {{backendError}}
+                    <div v-if="backendError.data && backendError.data.message">
+                        {{backendError.data.message}}
+                    </div>
+                    <div v-else-if="backendError.status && backendError.status === 409">
+                        Please check email your have entered. The email address is already being used. Please <router-link to="/signin">Sign in</router-link> or <router-link to="/forgot-password">reset password</router-link> if you forgot it
+                    </div>
                 </div>
 
                 <div class="field">
@@ -113,12 +118,9 @@
                     this.$router.push({ path: '/signin', query: {message: 'activateEmail'} })
                 }).catch(error => {
                     this.loading = false;
-                    if (error.data && error.data.message) {
-                        this.$v.$reset();
-                        this.backendError = error.data.message;
-                    } else {
-                        console.error(error);
-                    }
+                    this.$v.$reset();
+                    this.backendError = error;
+                    console.error(error);
                 });
             }
         }
