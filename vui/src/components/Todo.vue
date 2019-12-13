@@ -4,7 +4,6 @@
         <ol type="1">
             <li>Integration Silholuette's social auth</li>
             <li>Test heroku autodeployment</li>
-            <li>Redirect user back to initial page when user logins after session expires</li>
             <li>Add google recaptcha to signup form</li>
             <li>CRM integration sample (HubSpot, ActiveCampaign, etc)</li>
         </ol>

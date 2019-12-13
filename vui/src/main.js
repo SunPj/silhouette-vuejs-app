@@ -37,7 +37,7 @@ Vue.http.interceptors.push(function(request) {
     return function(response){
         if (response.status === 401) {
             this.$store.dispatch('user/setUser', {});
-            this.$router.push({ path: '/signin', query: {redirectTo: this.$router.path, message: 'sessionExpired'} })
+            this.$router.push({ path: '/signin', query: {redirectTo: this.$router.app.$route.path, message: 'sessionExpired'} })
         }
     };
 });

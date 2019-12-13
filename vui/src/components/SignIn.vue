@@ -93,7 +93,8 @@
                         const userData = response.data
                         this.setUser(userData)
                         this.$emit('loggedIn', userData)
-                        this.$router.push('/profile')
+                        const nextTo = this.redirectTo ? this.redirectTo : '/profile'
+                        this.$router.push(nextTo)
                     }).catch(function (error) {
                         this.loading = false;
                         if (error.data && error.data.message) {
