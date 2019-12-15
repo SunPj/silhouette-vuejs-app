@@ -1,8 +1,9 @@
-Play Silhouette VueJs Project
+Playframework authentication && user management sample 
 =====================================
+The goal of this project is to have starter project that covers basic authentication && user management functionality.
 
-The VueJs sample project which can be extended to fit your needs. 
-
+This is a Scala Playframework application that utilizes Silhouette as authentication library and Vuejs for frontend.
+ 
 ## Demo app
 See [Demo on Heroku](https://vuejs-slihouette.herokuapp.com/). Loading can take a while because it uses Heroku free dyno which is turned on/off every time 
 if there is no activity for some time. 
@@ -31,11 +32,15 @@ if there is no activity for some time.
 * Vue validation using vuelidate
 * Bulma
 * Buefy
-* Vuex for storing user data in local storage 
+* Vuex for storing user data in local storage
 
-### VueJs && PlayFramework integration 
-On running application in `prod` mode, all VueJs sources are compiled and moved to `public` directory where PlayFramework treats them as static assets.
-On running application in `dev` mode, all VueJs sources are proxied from Webpack server by PlayFramework, so hot reloading and other stuff work without magic.
+Although this project uses VueJs on frontend it's easy to port to Angular/ReactJs/etc because frontend part it fully 
+decoupled. Just replace code in `vue` directory for anything you like and it will work. 
+
+### VueJs && PlayFramework integration [also applicable to Angular/React/ect]
+On running application in `prod` mode, all frontend sources are compiled and moved to `public` directory where PlayFramework treats them as static assets.
+
+On running application in `dev` mode, all frontend sources are proxied from Webpack server by PlayFramework, so hot reloading and other stuff work without magic.
 
 ## How to run the project locally in dev mode
 
