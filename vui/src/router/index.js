@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Home from '../components/Home.vue'
 import ErrorPage from '../components/ErrorPage.vue'
 import SignIn from '../components/SignIn.vue'
+import OAuth from '../components/OAuth'
 import SignUp from '../components/SignUp.vue'
 import ChangePasswordPage from '../components/ChangePasswordPage.vue'
 import ForgotPasswordPage from '../components/ForgotPasswordPage.vue'
@@ -19,6 +20,14 @@ import store from '../store'
 Vue.use(VueRouter)
 
 const routes = [
+    {
+        path: '/oauth/:provider',
+        name: 'oauth',
+        component: OAuth,
+        props: (route) => ({
+            provider: route.params.provider
+        }),
+    },
     {
         path: '/admin',
         name: 'admin',

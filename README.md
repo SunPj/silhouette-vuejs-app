@@ -14,6 +14,7 @@ if there is no activity for some time.
 * Email activation
 * Reset password
 * Change password
+* Authentication via social providers Facebook, Google, Twitter
 * SPA
 * Basic user management functionality (admin page, user roles) 
 

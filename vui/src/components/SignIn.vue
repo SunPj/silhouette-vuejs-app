@@ -1,61 +1,69 @@
 <template>
-    <div class="columns card">
+    <div class="card">
         <b-loading :active.sync="loading"></b-loading>
 
-        <div class="column col-lg-offset-3 col-lg-6">
-            <h3 class="title is-3">Sign in</h3>
-            <form>
-                <div class="notification" :class="notification.type" v-if="this.notification.text">
-                    {{this.notification.text}}
-                </div>
+        <card-header-with-provider-buttons label="Sign in" :redirect-to="redirectTo"></card-header-with-provider-buttons>
 
-                <div class="field">
-                    <label class="label">Email</label>
-                    <input class="input"
-                           :class="{'is-danger': $v.email.$dirty && $v.email.$invalid, 'is-success':  $v.email.$dirty && !$v.email.$invalid}"
-                           type="text"
-                           placeholder="Email input"
-                           v-model.trim="$v.email.$model">
-                    <p class="help is-danger" v-if="$v.email.$dirty && !$v.email.required">Field is required</p>
-                    <p class="help is-danger" v-if="$v.email.$dirty && !$v.email.email">Wrong email address</p>
-                </div>
-
-                <div class="field">
-                    <label class="label">Password</label>
-                    <input class="input"
-                           type="password"
-                           :class="{'is-danger': $v.password.$dirty && $v.password.$invalid, 'is-success':  $v.password.$dirty && !$v.password.$invalid}"
-                           placeholder="Password"
-                           v-model="$v.password.$model">
-                    <p class="help is-danger" v-if="$v.password.$dirty && !$v.password.required">Field is required</p>
-                </div>
-
-                <div class="field">
-                    <div class="control">
-                        <label class="checkbox">
-                            <input type="checkbox" v-model="rememberMe">
-                            Remember me
-                        </label>
+        <div class="card-content">
+            <div class="content">
+                <form>
+                    <div class="notification" :class="notification.type" v-if="this.notification.text">
+                        {{this.notification.text}}
                     </div>
-                </div>
-                <div class="field is-grouped">
-                    <p class="control">
-                        <button class="button is-success" :disabled="$v.$invalid" @click="handleSubmit">Submit</button>
-                    </p>
-                    <div class="has-text-right">
-                        <router-link class="button is-warning" to="/forgot-password">I forgot my password</router-link>
+
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <input class="input"
+                               :class="{'is-danger': $v.email.$dirty && $v.email.$invalid, 'is-success':  $v.email.$dirty && !$v.email.$invalid}"
+                               type="text"
+                               placeholder="Email input"
+                               v-model.trim="$v.email.$model">
+                        <p class="help is-danger" v-if="$v.email.$dirty && !$v.email.required">Field is required</p>
+                        <p class="help is-danger" v-if="$v.email.$dirty && !$v.email.email">Wrong email address</p>
                     </div>
-                </div>
-            </form>
+
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <input class="input"
+                               type="password"
+                               :class="{'is-danger': $v.password.$dirty && $v.password.$invalid, 'is-success':  $v.password.$dirty && !$v.password.$invalid}"
+                               placeholder="Password"
+                               v-model="$v.password.$model">
+                        <p class="help is-danger" v-if="$v.password.$dirty && !$v.password.required">Field is
+                            required</p>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" v-model="rememberMe">
+                                Remember me
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <p class="control">
+                            <button class="button is-success" :disabled="$v.$invalid" @click="handleSubmit">Submit
+                            </button>
+                        </p>
+                        <div class="has-text-right">
+                            <router-link class="button is-warning" to="/forgot-password">I forgot my password
+                            </router-link>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     import {mapActions} from 'vuex'
-    import { required, email } from 'vuelidate/lib/validators'
+    import {required, email} from 'vuelidate/lib/validators'
+    import CardHeaderWithProviderButtons from "./CardHeaderWithProviderButtons";
 
     export default {
+        components: {CardHeaderWithProviderButtons},
         props: ['redirectTo', 'message'],
         data() {
             return {
