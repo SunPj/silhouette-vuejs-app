@@ -2,6 +2,9 @@
     <div class="container">
         <ul class="admin-menu">
             <li>
+                <router-link :to="{name: 'home'}">&larr; Back to site</router-link>
+            </li>
+            <li>
                 <router-link to="/admin/user">User management</router-link>
             </li>
             <li>

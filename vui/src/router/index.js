@@ -13,83 +13,12 @@ import UserManager from '../components/UserManager.vue'
 import OtherAdminPage from '../components/OtherAdminPage.vue'
 import Todo from '../components/Todo.vue'
 import About from '../components/About.vue'
+import SiteLayout from '../components/SiteLayout.vue'
 import store from '../store'
 
 Vue.use(VueRouter)
 
 const routes = [
-    {
-        path: '/',
-        name: 'home',
-        component: Home
-    },
-    {
-        path: '/error',
-        name: 'error',
-        props: (route) => ({
-            message : route.query.message
-        }),
-        component: ErrorPage
-    },
-    {
-        path: '/todo',
-        name: 'todo',
-        component: Todo
-    },
-    {
-        path: '/change-password',
-        name: 'change-password',
-        component: ChangePasswordPage,
-        meta: {
-            requiresAuth: true
-        }
-    },
-    {
-        path: '/reset-password',
-        name: 'reset-password',
-        props: (route) => ({
-            token: route.query.token
-        }),
-        component: ResetPasswordPage
-    },
-    {
-        path: '/forgot-password',
-        name: 'forgot-password',
-        component: ForgotPasswordPage
-    },
-    {
-        path: '/about',
-        name: 'about',
-        component: About
-    },
-    {
-        path: '/signin',
-        name: 'signin',
-        component: SignIn,
-        props: (route) => ({
-            redirectTo: route.query.redirectTo,
-            message : route.query.message
-        }),
-        meta: {
-            guest: true
-        }
-    },
-    {
-        path: '/signup',
-        name: 'SignUp',
-        component: SignUp,
-        meta: {
-            guest: true
-        }
-    },
-    {
-        path: '/profile',
-        name: 'profile',
-        component: UserProfile,
-        meta: {
-            requiresAuth: true
-        }
-    },
     {
         path: '/admin',
         name: 'admin',
@@ -106,6 +35,85 @@ const routes = [
             {
                 path: 'other',
                 component: OtherAdminPage
+            },
+        ]
+    },
+    {
+        path: '/',
+        name: 'SiteLayout',
+        component: SiteLayout,
+        children: [
+            {
+                path: '',
+                name: 'home',
+                component: Home
+            },
+            {
+                path: 'error',
+                name: 'error',
+                props: (route) => ({
+                    message : route.query.message
+                }),
+                component: ErrorPage
+            },
+            {
+                path: 'todo',
+                name: 'todo',
+                component: Todo
+            },
+            {
+                path: 'change-password',
+                name: 'change-password',
+                component: ChangePasswordPage,
+                meta: {
+                    requiresAuth: true
+                }
+            },
+            {
+                path: 'reset-password',
+                name: 'reset-password',
+                props: (route) => ({
+                    token: route.query.token
+                }),
+                component: ResetPasswordPage
+            },
+            {
+                path: 'forgot-password',
+                name: 'forgot-password',
+                component: ForgotPasswordPage
+            },
+            {
+                path: 'about',
+                name: 'about',
+                component: About
+            },
+            {
+                path: 'signin',
+                name: 'signin',
+                component: SignIn,
+                props: (route) => ({
+                    redirectTo: route.query.redirectTo,
+                    message : route.query.message
+                }),
+                meta: {
+                    guest: true
+                }
+            },
+            {
+                path: 'signup',
+                name: 'SignUp',
+                component: SignUp,
+                meta: {
+                    guest: true
+                }
+            },
+            {
+                path: 'profile',
+                name: 'profile',
+                component: UserProfile,
+                meta: {
+                    requiresAuth: true
+                }
             },
         ]
     }
