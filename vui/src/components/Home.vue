@@ -2,6 +2,10 @@
     <div>
         <h1 class="title is-2 has-text-centered">This is Silhouette VueJs app sample</h1>
 
+        <div class="notification is-success">
+            This is a demo app, feel free to test how it works. Please use <a target="_blank" href="https://github.com/SunPj/silhouette-vuejs-app/issues">github's issue functionality</a> to report a bug or ask a question. On <router-link to="/todo">todo</router-link> page you can find some next planned improvements
+        </div>
+
         <div class="content">
             <h3 class="is-3">Brief description of functionality:</h3>
             <ul>
@@ -10,6 +14,7 @@
                 <li>Email activation</li>
                 <li>Reset password</li>
                 <li>Change password</li>
+                <li>Authentication via social providers Facebook, Google, Twitter</li>
                 <li>SPA</li>
                 <li>Basic user management functionality (admin page, user roles)</li>
             </ul>
