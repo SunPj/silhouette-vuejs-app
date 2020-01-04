@@ -17,6 +17,7 @@ if there is no activity for some time.
 * Authentication via social providers Facebook, Google, Twitter
 * SPA
 * Basic user management functionality (admin page, user roles) 
+* ReCaptcha integration (signup form)
 
 ## Backend technical details:
 * PlayFramework (Scala)

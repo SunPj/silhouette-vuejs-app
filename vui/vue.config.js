@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require('webpack')
 
 module.exports = {
     outputDir: path.resolve(__dirname, "../public/ui"),
@@ -8,5 +9,14 @@ module.exports = {
         headers: {
             'Access-Control-Allow-Origin': '*',
         }
+    },
+    configureWebpack: {
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.conf': {
+                    'RECAPTCHA_SITEKEY': JSON.stringify(process.env.RECAPTCHA_SITEKEY)
+                }
+            })
+        ]
     }
 }
