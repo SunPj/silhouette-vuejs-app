@@ -1,6 +1,6 @@
 <template>
     <div class="card">
-        <b-loading :active.sync="loading"></b-loading>
+        <b-loading :active.sync="loading || captcha.status === captchaStatus.LOADING"></b-loading>
 
         <card-header-with-provider-buttons label="Sign Up"></card-header-with-provider-buttons>
 
@@ -61,6 +61,18 @@
                     </div>
 
                     <div class="field">
+                        <div class="notification is-danger" v-if="captchaFailed">
+                            Captcha error. Please get in touch with site admin to fix this issue.
+                        </div>
+                        <div v-else>
+                            <captcha @change="captchaChange"></captcha>
+                            <p class="help is-danger" v-if="$v.$anyDirty && !$v.captcha.mustBeChecked">
+                                Please verify that you are human. {{captcha.statusText}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="field">
                         <p class="control">
                             <button class="button is-success" :disabled="$v.$invalid" @click="handleSubmit">Submit</button>
                         </p>
@@ -75,8 +87,10 @@
     import { mapActions } from 'vuex'
     import { required, minLength, email } from 'vuelidate/lib/validators'
     import CardHeaderWithProviderButtons from "./CardHeaderWithProviderButtons";
+    import Captcha from "./Captcha";
+
     export default {
-        components: {CardHeaderWithProviderButtons},
+        components: {Captcha, CardHeaderWithProviderButtons},
         data() {
             return {
                 loading: false,
@@ -84,7 +98,22 @@
                 lastName: "",
                 email: "",
                 password: "",
-                backendError: null
+                backendError: null,
+                captcha: {
+                    status: 'LOADING'
+                },
+                captchaStatus: {
+                    LOADING: 'LOADING',
+                    FAILED: 'FAILED',
+                    ERROR: 'ERROR',
+                    UNCHECKED: 'UNCHECKED',
+                    CHECKED: 'CHECKED'
+                }
+            }
+        },
+        computed: {
+            captchaFailed: function() {
+                return this.captcha.status === this.captchaStatus.FAILED
             }
         },
         validations: {
@@ -103,10 +132,27 @@
             password: {
                 required,
                 minLength: minLength(5)
+            },
+            captcha: {
+                mustBeChecked: (value) => value.status === 'CHECKED'
             }
         },
         methods: {
             ...mapActions('user', ['setUser']),
+            captchaChange(change) {
+                if (change.type === 'error') {
+                    this.captcha.status = this.captchaStatus.FAILED
+                } else if (change.type === 'expired') {
+                    this.captcha.status = this.captchaStatus.ERROR
+                    this.captcha.statusText = 'Captcha expired'
+                } else if (change.type === 'rendered') {
+                    this.captcha.status = this.captchaStatus.UNCHECKED
+                    this.captcha.statusText = 'Captcha is not verified'
+                } else if (change.type === 'verify') {
+                    this.captcha.status = this.captchaStatus.CHECKED
+                    this.captcha.key = change.response
+                }
+            },
             handleSubmit(e) {
                 e.preventDefault();
                 this.loading = true;
@@ -114,7 +160,8 @@
                     firstName: this.firstName,
                     lastName: this.lastName,
                     email: this.email,
-                    password: this.password
+                    password: this.password,
+                    captchaResponse: this.captcha.key
                 }).then(response => {
                     this.loading = false;
                     const userData = response.data
