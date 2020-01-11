@@ -15,6 +15,7 @@
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
         <router-link to="/todo" class="navbar-item">Todo</router-link>
+        <router-link to="/changelog" class="navbar-item">Changelog</router-link>
         <router-link to="/about" class="navbar-item">About</router-link>
         <a target="_blank" class="navbar-item" href="https://github.com/SunPj/silhouette-vuejs-app">GitHub</a>
       </div>

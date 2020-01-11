@@ -13,6 +13,7 @@ import AdminLayout from '../components/AdminLayout.vue'
 import UserManager from '../components/UserManager.vue'
 import OtherAdminPage from '../components/OtherAdminPage.vue'
 import Todo from '../components/Todo.vue'
+import Changelog from '../components/Changelog.vue'
 import About from '../components/About.vue'
 import SiteLayout from '../components/SiteLayout.vue'
 import store from '../store'
@@ -69,6 +70,11 @@ const routes = [
                 path: 'todo',
                 name: 'todo',
                 component: Todo
+            },
+            {
+                path: 'changelog',
+                name: 'changelog',
+                component: Changelog
             },
             {
                 path: 'change-password',
