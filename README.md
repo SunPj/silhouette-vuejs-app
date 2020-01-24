@@ -18,6 +18,7 @@ if there is no activity for some time.
 * SPA
 * Basic user management functionality (admin page, user roles) 
 * ReCaptcha integration (signup form)
+* Password brute force protection (Default is 5 tries per 30 minutes, but can be configured)
 
 ## Backend technical details:
 * PlayFramework (Scala)

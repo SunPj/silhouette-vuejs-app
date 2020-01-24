@@ -17,6 +17,7 @@
                 <li>Authentication via social providers Facebook, Google, Twitter</li>
                 <li>SPA</li>
                 <li>Recaptcha</li>
+                <li>Password brute force protection (Default is 5 tries per 30 minutes, but can be configured)</li>
                 <li>Basic user management functionality (admin page, user roles)</li>
             </ul>
 

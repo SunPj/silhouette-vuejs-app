@@ -5,6 +5,10 @@
         <table class="table is-fullwidth">
             <tbody>
             <tr>
+                <td>1/24/20</td>
+                <td>Password brute force protection (Default is 5 tries per 30 minutes, but can be configured)</td>
+            </tr>
+            <tr>
                 <td>1/10/20</td>
                 <td>Recaptcha integration</td>
             </tr>

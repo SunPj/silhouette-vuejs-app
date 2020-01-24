@@ -105,14 +105,27 @@
                         this.$router.push(nextTo)
                     }).catch(function (error) {
                         this.loading = false;
-                        if (error.data && error.data.message) {
+                        if (error.data && error.data.errorCode) {
                             this.$v.$reset();
                             this.notification.type = 'is-danger';
-                            this.notification.text = error.data.message;
+                            this.notification.text = this.getErrorMessage(error.data);
                         } else {
                             console.error(error);
                         }
                     });
+                }
+            },
+            getErrorMessage(response) {
+                if (response.errorCode === 'InvalidPassword') {
+                    return `Wrong email or password. Your account will be temporary blocked after ${response.attemptsAllowed} try(s)`
+                } else if (response.errorCode === 'NonActivatedUserEmail') {
+                    return 'Email has not been confirmed yet'
+                } else if (response.errorCode === 'UserNotFound') {
+                    return 'There is no user by this email'
+                } else if (response.errorCode === 'TooManyRequests') {
+                    return `You reached attempts limit. Please try later at ${new Date(response.nextAllowedAttemptTime).toLocaleString()} or get in touch with site admin`
+                } else {
+                    return 'System error. Please get in touch with site admin to solve this error.'
                 }
             }
         },
