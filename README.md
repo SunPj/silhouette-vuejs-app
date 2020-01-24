@@ -63,15 +63,18 @@ silhouette {
 
 sendgrid.api.key = "..."
 
-
 play.crypto.secret="..."
-```
 
+recaptcha.secretKey = "..."
+
+```
 3. Run backend `sbt run`
 
-4. Install frontend dependencies and run frontend `cd vui && npm install && npm run serve`
+4. Make sure you have RECAPTCHA_SITEKEY environment variable or export it `export RECAPTCHA_SITEKEY="..."`
 
-5. Open your http://localhost:9000/ in your browser. That's PlayFramework bakend server which proxies all frontend assets so 
+5. Install frontend dependencies and run frontend `cd vui && npm install && npm run serve`
+
+6. Open your http://localhost:9000/ in your browser. That's PlayFramework bakend server which proxies all frontend assets so 
 Hot
 
 ### Running in production

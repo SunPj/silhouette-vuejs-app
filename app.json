@@ -53,6 +53,14 @@
     "XING_CONSUMER_SECRET": {
       "description": "The Xing OAuth1 consumer secret",
       "required": false
-    }
+    },
+    "RECAPTCHA_SITEKEY": {
+      "description": "The google ReCaptcha sitekey",
+      "required": true
+    },
+    "RECAPTCHA_SECRETKEY": {
+      "description": "The google ReCaptcha secret key",
+      "required": true
+    },
   }
 }
