@@ -45,10 +45,10 @@ class ResetPasswordController @Inject()(components: ControllerComponents,
       case Some(authToken) =>
         ResetPasswordForm.form.bindFromRequest.fold(
           _ => Future.successful(BadRequest),
-          password => userService.retrieve(authToken.userID).flatMap {
-            case Some(user) if user.loginInfo.providerID == CredentialsProvider.ID =>
+          password => userService.retrieveUserLoginInfo(authToken.userID, CredentialsProvider.ID).flatMap {
+            case Some((user, loginInfo)) =>
               val passwordInfo = passwordHasherRegistry.current.hash(password)
-              authInfoRepository.update[PasswordInfo](user.loginInfo, passwordInfo).map { _ =>
+              authInfoRepository.update[PasswordInfo](loginInfo, passwordInfo).map { _ =>
                 Ok
               }
             case _ => Future.successful(BadRequest(Json.obj("message" -> "Reset token is either invalid or has expired. Please reset your password again.")))

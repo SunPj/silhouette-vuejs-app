@@ -2,6 +2,7 @@ package controllers
 
 import com.mohiva.play.silhouette.api._
 import com.mohiva.play.silhouette.api.util.Clock
+import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import forms.SignInForm
 import javax.inject.Inject
 import models.services._
@@ -37,7 +38,8 @@ class SignInController @Inject()(authenticateService: AuthenticateService,
       data => {
         authenticateService.credentials(data.email, data.password).flatMap {
           case Success(user) =>
-            authenticateUser(user, data.rememberMe)
+            val loginInfo = LoginInfo(CredentialsProvider.ID, user.email.get)
+            authenticateUser(user, loginInfo, data.rememberMe)
           case InvalidPassword(attemptsAllowed) =>
             Future.successful(Forbidden(Json.obj("errorCode" -> "InvalidPassword", "attemptsAllowed" -> attemptsAllowed)))
           case NonActivatedUserEmail =>

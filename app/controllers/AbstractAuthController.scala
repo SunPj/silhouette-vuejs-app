@@ -35,9 +35,9 @@ abstract class AbstractAuthController(silhouette: Silhouette[DefaultEnv],
     * @param request    Initial request
     * @return The result to display.
     */
-  protected def authenticateUser(user: User, rememberMe: Boolean)(implicit request: Request[_]): Future[AuthenticatorResult] = {
+  protected def authenticateUser(user: User, loginInfo: LoginInfo, rememberMe: Boolean)(implicit request: Request[_]): Future[AuthenticatorResult] = {
     val c = configuration.underlying
-    silhouette.env.authenticatorService.create(user.loginInfo).map {
+    silhouette.env.authenticatorService.create(loginInfo).map {
       case authenticator if rememberMe =>
         authenticator.copy(
           expirationDateTime = clock.now + c.as[FiniteDuration]("silhouette.authenticator.rememberMe.authenticatorExpiry"),

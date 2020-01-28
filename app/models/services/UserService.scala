@@ -2,6 +2,7 @@ package models.services
 
 import java.util.UUID
 
+import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
 import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 import models.{User, UserRoles}
@@ -22,12 +23,13 @@ trait UserService extends IdentityService[User] {
   def changeUserRole(userId: UUID, role: UserRoles.Value): Future[Boolean]
 
   /**
-    * Retrieves a user that matches the specified ID.
+    * Retrieves a user and login info pair by userID and login info providerID
     *
-    * @param id The ID to retrieve a user.
+    * @param id         The ID to retrieve a user.
+    * @param providerID The ID of login info provider.
     * @return The retrieved user or None if no user could be retrieved for the given ID.
     */
-  def retrieve(id: UUID): Future[Option[User]]
+  def retrieveUserLoginInfo(id: UUID, providerID: String): Future[Option[(User, LoginInfo)]]
 
   /**
     * Saves a user.

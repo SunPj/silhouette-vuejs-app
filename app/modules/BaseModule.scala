@@ -2,6 +2,7 @@ package modules
 
 import com.google.inject.{AbstractModule, Provides}
 import javax.inject.Named
+import models.daos.{LoginInfoDAO, LoginInfoDAOImpl}
 import models.services.captcha.{CaptchaService, ReCaptchaConfig, ReCaptchaService}
 import models.services.{AuthTokenService, AuthTokenServiceImpl, BruteForceDefenderActor, BruteForceDefenderConf}
 import net.codingwell.scalaguice.ScalaModule
@@ -21,6 +22,7 @@ class BaseModule extends AbstractModule with ScalaModule with AkkaGuiceSupport {
     */
   override def configure(): Unit = {
     bind[AuthTokenService].to[AuthTokenServiceImpl]
+    bind[LoginInfoDAO].to[LoginInfoDAOImpl]
     bind[CaptchaService].to[ReCaptchaService]
     bindActor[BruteForceDefenderActor]("brute-force-defender")
   }

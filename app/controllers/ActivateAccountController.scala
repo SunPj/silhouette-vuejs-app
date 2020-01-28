@@ -56,8 +56,8 @@ class ActivateAccountController @Inject()(components: ControllerComponents,
     */
   def activate(token: UUID) = silhouette.UnsecuredAction.async {
     authTokenService.validate(token).flatMap {
-      case Some(authToken) => userService.retrieve(authToken.userID).flatMap {
-        case Some(user) if user.loginInfo.providerID == CredentialsProvider.ID =>
+      case Some(authToken) => userService.retrieveUserLoginInfo(authToken.userID, CredentialsProvider.ID).flatMap {
+        case Some((user, _)) =>
           userService.save(user.copy(activated = true)).map { _ =>
             Redirect("/signin?message=emailVerified")
           }
