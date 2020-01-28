@@ -1,5 +1,6 @@
 package forms
 
+import models.services.CredentialsSingUpData
 import play.api.data.Form
 import play.api.data.Forms._
 
@@ -18,23 +19,6 @@ object SignUpForm {
       "email" -> email,
       "password" -> nonEmptyText,
       "captchaResponse" -> nonEmptyText
-    )(Data.apply)(Data.unapply)
+    )(CredentialsSingUpData.apply)(CredentialsSingUpData.unapply)
   )
-
-  /**
-    * The form data.
-    *
-    * @param firstName       The first name of a user.
-    * @param lastName        The last name of a user.
-    * @param email           The email of the user.
-    * @param password        The password of the user.
-    * @param captchaResponse captcha response
-    */
-  case class Data(
-                   firstName: String,
-                   lastName: String,
-                   email: String,
-                   password: String,
-                   captchaResponse: String)
-
 }
