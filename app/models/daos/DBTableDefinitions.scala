@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import models.AuthToken
+import models.{AuthToken, User, UserRoles}
 import slick.jdbc.JdbcProfile
 import slick.lifted.ProvenShape.proveShapeOf
 
@@ -39,6 +39,11 @@ trait DBTableDefinitions {
                     roleId: Int,
                     signedUpAt: ZonedDateTime)
 
+  object DBUser {
+    def toUser(u: DBUser): User = User(u.userID, u.firstName, u.lastName, u.email, u.avatarURL, u.activated, UserRoles(u.roleId))
+    def fromUser(u: User): DBUser = DBUser(u.userID, u.firstName, u.lastName, u.email, u.avatarURL, u.activated, u.role.id, ZonedDateTime.now)
+  }
+
   class Users(tag: Tag) extends Table[DBUser](tag, Some("auth"), "user") {
     import MyPostgresProfile.api._
 
@@ -50,20 +55,20 @@ trait DBTableDefinitions {
     def activated = column[Boolean]("activated")
     def roleId = column[Int]("role_id")
     def signedUpAt = column[ZonedDateTime]("signed_up_at")
-    def * = (id, firstName, lastName, email, avatarURL, activated, roleId, signedUpAt) <> (DBUser.tupled, DBUser.unapply)
+    def * = (id, firstName, lastName, email, avatarURL, activated, roleId, signedUpAt) <> ((DBUser.apply _).tupled, DBUser.unapply)
   }
 
-  case class DBLoginInfo(
-    id: Option[Long],
-    providerID: String,
-    providerKey: String
-  )
+  case class DBLoginInfo(id: Option[Long], providerID: String, providerKey: String)
+  object DBLoginInfo {
+    def fromLoginInfo(loginInfo: LoginInfo): DBLoginInfo = DBLoginInfo(None, loginInfo.providerID, loginInfo.providerKey)
+    def toLoginInfo(dbLoginInfo: DBLoginInfo) = LoginInfo(dbLoginInfo.providerID, dbLoginInfo.providerKey)
+  }
 
   class LoginInfos(tag: Tag) extends Table[DBLoginInfo](tag, Some("auth"), "login_info") {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def providerID = column[String]("provider_id")
     def providerKey = column[String]("provider_key")
-    def * = (id.?, providerID, providerKey) <> (DBLoginInfo.tupled, DBLoginInfo.unapply)
+    def * = (id.?, providerID, providerKey) <> ((DBLoginInfo.apply _).tupled, DBLoginInfo.unapply)
   }
 
   case class DBUserLoginInfo(

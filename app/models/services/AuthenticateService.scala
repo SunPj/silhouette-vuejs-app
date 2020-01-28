@@ -1,6 +1,7 @@
 package models.services
 
 import java.time.Instant
+import java.util.UUID
 
 import akka.actor.ActorRef
 import com.mohiva.play.silhouette.api.util.Credentials
@@ -13,6 +14,9 @@ import models.services.BruteForceDefenderActor._
 import scala.concurrent.duration._
 import akka.pattern.ask
 import akka.util.Timeout
+import com.mohiva.play.silhouette.api.{AuthInfo, LoginInfo}
+import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
+import models.daos.LoginInfoDAO
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -21,10 +25,13 @@ import scala.concurrent.{ExecutionContext, Future}
   * @param userService             The user service implementation.
   * @param credentialsProvider     The credentials provider.
   * @param bruteForceDefenderActor actor that tracks failed user signins and decides whether user allowed to sign in
+  * @param authInfoRepository      The auth info repository implementation.
   * @param ec                      The execution context.
   */
 class AuthenticateService @Inject()(credentialsProvider: CredentialsProvider,
                                     userService: UserService,
+                                    authInfoRepository: AuthInfoRepository,
+                                    loginInfoDAO: LoginInfoDAO,
                                     @Named("brute-force-defender") bruteForceDefenderActor: ActorRef)(implicit ec: ExecutionContext) {
   implicit val timeout: Timeout = 5.seconds
 
@@ -54,6 +61,33 @@ class AuthenticateService @Inject()(credentialsProvider: CredentialsProvider,
       case SignInForbidden(nextSignInAllowedAt) =>
         Future.successful(ToManyAuthenticateRequests(nextSignInAllowedAt))
     }
+  }
+
+  /**
+    * Adds authentication method to user
+    *
+    * @param userId    user id
+    * @param loginInfo login info
+    * @param authInfo  auth info
+    * @tparam T tyupe of auth info
+    * @return
+    */
+  def addAuthenticateMethod[T <: AuthInfo](userId: UUID, loginInfo: LoginInfo, authInfo: T): Future[Unit] = {
+    for {
+      _ <- loginInfoDAO.saveUserLoginInfo(userId, loginInfo)
+      _ <- authInfoRepository.add(loginInfo, authInfo)
+    } yield ()
+  }
+
+  /**
+    * Checks whether user have authentication method for given provider id
+    *
+    * @param userId     user id
+    * @param providerId authentication provider id
+    * @return true if user has authentication method for given provider id, otherwise false
+    */
+  def userHasAuthenticationMethod(userId: UUID, providerId: String): Future[Boolean] = {
+    loginInfoDAO.find(userId, providerId).map(_.nonEmpty)
   }
 }
 

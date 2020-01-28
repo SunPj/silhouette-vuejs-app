@@ -6,7 +6,7 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 import javax.inject.Inject
 import models.{User, UserRoles}
-import models.daos.UserDAO
+import models.daos.{LoginInfoDAO, UserDAO}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -15,7 +15,8 @@ import scala.concurrent.{ExecutionContext, Future}
   *
   * @param userDAO The user DAO implementation.
   */
-class UserServiceImpl @Inject()(userDAO: UserDAO)(implicit ec: ExecutionContext) extends UserService {
+class UserServiceImpl @Inject()(userDAO: UserDAO,
+                                loginInfoDAO: LoginInfoDAO)(implicit ec: ExecutionContext) extends UserService {
 
   /**
     * Retrieves a user that matches the specified login info.
@@ -53,7 +54,6 @@ class UserServiceImpl @Inject()(userDAO: UserDAO)(implicit ec: ExecutionContext)
       case None => // Insert a new user
         userDAO.save(User(
           userID = UUID.randomUUID(),
-          loginInfo = profile.loginInfo,
           firstName = profile.firstName,
           lastName = profile.lastName,
           email = profile.email,
@@ -65,12 +65,15 @@ class UserServiceImpl @Inject()(userDAO: UserDAO)(implicit ec: ExecutionContext)
   }
 
   /**
-    * Retrieves a user that matches the specified ID.
+    * Retrieves a user and login info pair by userID and login info providerID
     *
-    * @param id The ID to retrieve a user.
+    * @param id         The ID to retrieve a user.
+    * @param providerID The ID of login info provider.
     * @return The retrieved user or None if no user could be retrieved for the given ID.
     */
-  override def retrieve(id: UUID): Future[Option[User]] = userDAO.find(id)
+  def retrieveUserLoginInfo(id: UUID, providerID: String): Future[Option[(User, LoginInfo)]] = {
+    loginInfoDAO.find(id, providerID)
+  }
 
   /**
     * Changes role of user

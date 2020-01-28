@@ -2,7 +2,6 @@ package models.services
 
 import java.util.UUID
 
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.services.AvatarService
 import com.mohiva.play.silhouette.api.util.PasswordHasherRegistry
 import com.mohiva.play.silhouette.api.LoginInfo
@@ -19,15 +18,16 @@ import scala.concurrent.{ExecutionContext, Future}
   * @param avatarService          The avatar service implementation.
   * @param passwordHasherRegistry The password hasher registry.
   * @param mailService            The mailer service.
+  * @param authenticateService    The authenticate service
   * @param userService            The user service implementation.
   * @param authTokenService       The auth token service implementation.
-  * @param authInfoRepository     The auth info repository implementation.
+
   */
 class SignUpService @Inject()(captchaService: CaptchaService,
                               avatarService: AvatarService,
                               authTokenService: AuthTokenService,
-                              authInfoRepository: AuthInfoRepository,
                               mailService: MailService,
+                              authenticateService: AuthenticateService,
                               passwordHasherRegistry: PasswordHasherRegistry,
                               userService: UserService)(implicit ex: ExecutionContext) {
 
@@ -42,7 +42,6 @@ class SignUpService @Inject()(captchaService: CaptchaService,
             val authInfo = passwordHasherRegistry.current.hash(data.password)
             val user = User(
               userID = UUID.randomUUID(),
-              loginInfo = loginInfo,
               firstName = Some(data.firstName),
               lastName = Some(data.lastName),
               email = Some(data.email),
@@ -52,8 +51,8 @@ class SignUpService @Inject()(captchaService: CaptchaService,
             )
             for {
               avatar <- avatarService.retrieveURL(data.email)
-              user <- userService.save(user.copy(avatarURL = avatar))
-              authInfo <- authInfoRepository.add(loginInfo, authInfo)
+              user <- userService.createOrUpdate(user.copy(avatarURL = avatar))
+              _ <- authenticateService.addAuthenticateMethod(user.userID, loginInfo, authInfo)
               authToken <- authTokenService.create(user.userID)
             } yield {
               val activationUrl = activationUrlProvider(authToken.id)

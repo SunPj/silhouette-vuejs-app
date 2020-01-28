@@ -11,7 +11,7 @@ import forms.ChangePasswordForm
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.libs.json.Json
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents}
-import utils.auth.{DefaultEnv, WithProvider}
+import utils.auth.{DefaultEnv, HasSignUpMethod}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -29,13 +29,14 @@ class ChangePasswordController @Inject()(components: ControllerComponents,
                                          silhouette: Silhouette[DefaultEnv],
                                          credentialsProvider: CredentialsProvider,
                                          authInfoRepository: AuthInfoRepository,
+                                         hasSignUpMethod: HasSignUpMethod,
                                          passwordHasherRegistry: PasswordHasherRegistry)(implicit ex: ExecutionContext) extends AbstractController(components) with I18nSupport {
   /**
     * Changes the password.
     *
     * @return The result to display.
     */
-  def submit = silhouette.SecuredAction(WithProvider[DefaultEnv#A](CredentialsProvider.ID)).async {
+  def submit = silhouette.SecuredAction(hasSignUpMethod[DefaultEnv#A](CredentialsProvider.ID)).async {
     implicit request: SecuredRequest[DefaultEnv, AnyContent] =>
       ChangePasswordForm.form.bindFromRequest.fold(
         form => Future.successful(BadRequest),
