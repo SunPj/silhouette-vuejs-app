@@ -6,8 +6,9 @@ import com.mohiva.play.silhouette.api.exceptions.ProviderException
 import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
 import com.mohiva.play.silhouette.api.util.Clock
 import com.mohiva.play.silhouette.impl.providers._
-import models.services.{AuthenticateService, UserService}
+import models.services._
 import play.api.Configuration
+import play.api.libs.json.Json
 import play.api.mvc.{AnyContent, ControllerComponents, Request}
 import utils.auth.DefaultEnv
 
@@ -47,9 +48,15 @@ class SocialAuthController @Inject()(components: ControllerComponents,
           case Left(result) => Future.successful(result)
           case Right(authInfo) => for {
             profile <- p.retrieveProfile(authInfo)
-            user <- userService.save(profile)
-            _ <- authenticateService.addAuthenticateMethod(user.userID, profile.loginInfo, authInfo)
-            result <- authenticateUser(user, profile.loginInfo, rememberMe = true)
+            userBindResult <- authenticateService.provideUserForSocialAccount(provider, profile, authInfo)
+            result <- userBindResult match {
+              case AccountBound(u) =>
+                authenticateUser(u, profile.loginInfo, rememberMe = true)
+              case EmailIsBeingUsed(providers) =>
+                Future.successful(Ok(Json.obj("error" -> "EmailIsBeingUsed", "providers" -> providers)))
+              case NoEmailProvided =>
+                Future.successful(Ok(Json.obj("error" -> "NoEmailProvided")))
+            }
           } yield result
         }
       case _ => Future.failed(new ProviderException(s"Cannot authenticate with unexpected social provider $provider"))

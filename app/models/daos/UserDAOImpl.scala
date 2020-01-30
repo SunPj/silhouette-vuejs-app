@@ -76,4 +76,14 @@ class UserDAOImpl @Inject() (protected val dbConfigProvider: DatabaseConfigProvi
   override def updateUserRole(userId: UUID, role: UserRoles.UserRole): Future[Boolean] = {
     db.run(slickUsers.filter(_.id === userId).map(_.roleId).update(role.id)).map(_ > 0)
   }
+
+  /**
+    * Finds a user by its email
+    *
+    * @param email email of the user to find
+    * @return The found user or None if no user for the given login info could be found
+    */
+  def findByEmail(email: String): Future[Option[User]] = {
+    db.run(slickUsers.filter(_.email === email).take(1).result.headOption).map(_ map DBUser.toUser)
+  }
 }

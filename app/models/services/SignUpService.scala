@@ -8,7 +8,7 @@ import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
 import javax.inject.Inject
 import models.services.captcha.CaptchaService
-import models.{User, UserRoles}
+import models.User
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -40,18 +40,9 @@ class SignUpService @Inject()(captchaService: CaptchaService,
             Future.successful(UserAlreadyExists)
           case None =>
             val authInfo = passwordHasherRegistry.current.hash(data.password)
-            val user = User(
-              userID = UUID.randomUUID(),
-              firstName = Some(data.firstName),
-              lastName = Some(data.lastName),
-              email = Some(data.email),
-              avatarURL = None,
-              activated = false,
-              role = UserRoles.User
-            )
             for {
               avatar <- avatarService.retrieveURL(data.email)
-              user <- userService.createOrUpdate(user.copy(avatarURL = avatar))
+              user <- userService.createOrUpdate(loginInfo, data.email, Some(data.firstName), Some(data.lastName), avatar)
               _ <- authenticateService.addAuthenticateMethod(user.userID, loginInfo, authInfo)
               authToken <- authTokenService.create(user.userID)
             } yield {
