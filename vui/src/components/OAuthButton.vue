@@ -48,6 +48,9 @@
                     } else {
                         console.log("Error on social auth")
                         console.log(result.error)
+                        if (result.error.code) {
+                            vi.$emit('error', result.error)
+                        }
                     }
                 };
 
