@@ -53,9 +53,9 @@ class SocialAuthController @Inject()(components: ControllerComponents,
               case AccountBound(u) =>
                 authenticateUser(u, profile.loginInfo, rememberMe = true)
               case EmailIsBeingUsed(providers) =>
-                Future.successful(Ok(Json.obj("error" -> "EmailIsBeingUsed", "providers" -> providers)))
+                Future.successful(Conflict(Json.obj("error" -> "EmailIsBeingUsed", "providers" -> providers)))
               case NoEmailProvided =>
-                Future.successful(Ok(Json.obj("error" -> "NoEmailProvided")))
+                Future.successful(BadRequest(Json.obj("error" -> "NoEmailProvided")))
             }
           } yield result
         }
