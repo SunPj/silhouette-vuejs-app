@@ -3,7 +3,6 @@ package models.services
 import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 import javax.inject.Inject
 import models.{User, UserRoles}
 import models.daos.{LoginInfoDAO, UserDAO}
@@ -27,44 +26,6 @@ class UserServiceImpl @Inject()(userDAO: UserDAO,
   def retrieve(loginInfo: LoginInfo): Future[Option[User]] = userDAO.find(loginInfo)
 
   /**
-    * Saves a user.
-    *
-    * @param user The user to save.
-    * @return The saved user.
-    */
-  def save(user: User) = userDAO.save(user)
-
-  /**
-    * Saves the social profile for a user.
-    *
-    * If a user exists for this profile then update the user, otherwise create a new user with the given profile.
-    *
-    * @param profile The social profile to save.
-    * @return The user for whom the profile was saved.
-    */
-  def save(profile: CommonSocialProfile) = {
-    userDAO.find(profile.loginInfo).flatMap {
-      case Some(user) => // Update user with profile
-        userDAO.save(user.copy(
-          firstName = profile.firstName,
-          lastName = profile.lastName,
-          email = profile.email,
-          avatarURL = profile.avatarURL
-        ))
-      case None => // Insert a new user
-        userDAO.save(User(
-          userID = UUID.randomUUID(),
-          firstName = profile.firstName,
-          lastName = profile.lastName,
-          email = profile.email,
-          avatarURL = profile.avatarURL,
-          activated = false,
-          role = UserRoles.User
-        ))
-    }
-  }
-
-  /**
     * Retrieves a user and login info pair by userID and login info providerID
     *
     * @param id         The ID to retrieve a user.
@@ -84,5 +45,56 @@ class UserServiceImpl @Inject()(userDAO: UserDAO,
     */
   override def changeUserRole(userId: UUID, role: UserRoles.Value): Future[Boolean] = {
     userDAO.updateUserRole(userId, role)
+  }
+
+  /**
+    * Creates or updates user
+    *
+    * If a user exists for given login info or email then update the user, otherwise create a new user with the given data
+    *
+    * @param loginInfo social profile
+    * @param email     user email
+    * @param firstName first name
+    * @param lastName  last name
+    * @param avatarURL avatar URL
+    * @return
+    */
+  override def createOrUpdate(loginInfo: LoginInfo,
+                              email: String,
+                              firstName: Option[String],
+                              lastName: Option[String],
+                              avatarURL: Option[String]): Future[User] = {
+
+    Future.sequence(Seq(userDAO.find(loginInfo), userDAO.findByEmail(email))).flatMap { users =>
+      users.flatten.headOption match {
+        case Some(user) =>
+          userDAO.save(user.copy(
+            firstName = firstName,
+            lastName = lastName,
+            email = Some(email),
+            avatarURL = avatarURL
+          ))
+        case None =>
+          userDAO.save(User(
+            userID = UUID.randomUUID(),
+            firstName = firstName,
+            lastName = lastName,
+            email = Some(email),
+            avatarURL = avatarURL,
+            activated = false,
+            role = UserRoles.User
+          ))
+      }
+    }
+  }
+
+  /**
+    * Marks user email as activated
+    *
+    * @param user user
+    * @return
+    */
+  override def setEmailActivated(user: User): Future[User] = {
+    userDAO.save(user.copy(activated = true))
   }
 }

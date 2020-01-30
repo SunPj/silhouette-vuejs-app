@@ -6,7 +6,7 @@ import java.util.UUID
 import akka.actor.ActorRef
 import com.mohiva.play.silhouette.api.util.Credentials
 import com.mohiva.play.silhouette.impl.exceptions.{IdentityNotFoundException, InvalidPasswordException}
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import com.mohiva.play.silhouette.impl.providers._
 import javax.inject.{Inject, Named}
 import models.User
 import models.services.BruteForceDefenderActor._
@@ -32,6 +32,7 @@ class AuthenticateService @Inject()(credentialsProvider: CredentialsProvider,
                                     userService: UserService,
                                     authInfoRepository: AuthInfoRepository,
                                     loginInfoDAO: LoginInfoDAO,
+                                    socialProviderRegistry: SocialProviderRegistry,
                                     @Named("brute-force-defender") bruteForceDefenderActor: ActorRef)(implicit ec: ExecutionContext) {
   implicit val timeout: Timeout = 5.seconds
 
@@ -60,6 +61,43 @@ class AuthenticateService @Inject()(credentialsProvider: CredentialsProvider,
         }
       case SignInForbidden(nextSignInAllowedAt) =>
         Future.successful(ToManyAuthenticateRequests(nextSignInAllowedAt))
+    }
+  }
+
+  /**
+    * Creates or fetches existing user for given social profile and binds it with given auth info
+    *
+    * @param provider social authentication provider
+    * @param profile  social profile data
+    * @param authInfo authentication info
+    * @tparam T type of authentication info
+    * @return
+    *         NoEmailProvided if social profile email is empty
+    *         EmailIsBeingUsed if there is existing user with email which eq to given social profile email and user
+    *           has no authentication providers for given provider
+    *         AccountBind if everything is ok
+    */
+  def provideUserForSocialAccount[T <: AuthInfo](provider: String, profile: CommonSocialProfile, authInfo: T): Future[UserForSocialAccountResult] = {
+    profile.email match {
+      case Some(email) =>
+        loginInfoDAO.getAuthenticationProviders(email).flatMap { providers =>
+          if (providers.contains(provider) || providers.isEmpty) {
+            for {
+              user <- userService.createOrUpdate(
+                profile.loginInfo,
+                email,
+                profile.firstName,
+                profile.lastName,
+                profile.avatarURL
+              )
+              _ <- addAuthenticateMethod(user.userID, profile.loginInfo, authInfo)
+            } yield AccountBound(user)
+          } else {
+            Future.successful(EmailIsBeingUsed(providers))
+          }
+        }
+      case None =>
+        Future.successful(NoEmailProvided)
     }
   }
 
@@ -97,3 +135,8 @@ case class InvalidPassword(attemptsAllowed: Int) extends AuthenticateResult
 object NonActivatedUserEmail extends AuthenticateResult
 object UserNotFound extends AuthenticateResult
 case class ToManyAuthenticateRequests(nextAllowedAttemptTime: Instant) extends AuthenticateResult
+
+sealed trait UserForSocialAccountResult
+case object NoEmailProvided extends UserForSocialAccountResult
+case class EmailIsBeingUsed(providers: Seq[String]) extends UserForSocialAccountResult
+case class AccountBound(user: User) extends UserForSocialAccountResult

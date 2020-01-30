@@ -12,6 +12,14 @@ import scala.concurrent.Future
  */
 trait LoginInfoDAO {
   /**
+    * Get list of user authentication methods providers
+    *
+    * @param email user email
+    * @return
+    */
+  def getAuthenticationProviders(email: String): Future[Seq[String]]
+
+  /**
     * Finds a user and login info pair by userID and login info providerID
     *
     * @param userId     user id

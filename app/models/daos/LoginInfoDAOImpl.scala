@@ -74,4 +74,20 @@ class LoginInfoDAOImpl @Inject()(protected val dbConfigProvider: DatabaseConfigP
 
     db.run(action.result.headOption).map(_.map{case (u, li) => (DBUser.toUser(u), DBLoginInfo.toLoginInfo(li))})
   }
+
+  /**
+    * Get list of user authentication methods providers
+    *
+    * @param email user email
+    * @return
+    */
+  override def getAuthenticationProviders(email: String): Future[Seq[String]] = {
+    val action = for {
+      ((_, _), li) <- slickUsers.filter(_.email === email)
+        .join(slickUserLoginInfos).on(_.id === _.userID)
+        .join(slickLoginInfos).on(_._2.loginInfoId === _.id)
+    } yield li.providerID
+
+    db.run(action.result)
+  }
 }

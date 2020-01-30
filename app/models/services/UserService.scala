@@ -4,7 +4,6 @@ import java.util.UUID
 
 import com.mohiva.play.silhouette.api.LoginInfo
 import com.mohiva.play.silhouette.api.services.IdentityService
-import com.mohiva.play.silhouette.impl.providers.CommonSocialProfile
 import models.{User, UserRoles}
 
 import scala.concurrent.Future
@@ -32,20 +31,28 @@ trait UserService extends IdentityService[User] {
   def retrieveUserLoginInfo(id: UUID, providerID: String): Future[Option[(User, LoginInfo)]]
 
   /**
-    * Saves a user.
+    * Creates or updates a user
     *
-    * @param user The user to save.
-    * @return The saved user.
+    * If a user exists for given login info or email then update the user, otherwise create a new user with the given data
+    *
+    * @param loginInfo social profile
+    * @param email     user email
+    * @param firstName first name
+    * @param lastName  last name
+    * @param avatarURL avatar URL
+    * @return
     */
-  def save(user: User): Future[User]
+  def createOrUpdate(loginInfo: LoginInfo,
+                     email: String,
+                     firstName: Option[String],
+                     lastName: Option[String],
+                     avatarURL: Option[String]): Future[User]
 
   /**
-    * Saves the social profile for a user.
+    * Marks user email as activated
     *
-    * If a user exists for this profile then update the user, otherwise create a new user with the given profile.
-    *
-    * @param profile The social profile to save.
-    * @return The user for whom the profile was saved.
+    * @param user user
+    * @return
     */
-  def save(profile: CommonSocialProfile): Future[User]
+  def setEmailActivated(user: User): Future[User]
 }
