@@ -11,13 +11,12 @@ import utils.{GridRequest, GridResponse, SlickGridQuerySupport}
 import scala.concurrent.{ExecutionContext, Future}
 
 class UserManagementDAO @Inject() (protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends DAOSlick with SlickGridQuerySupport {
-  import profile.api._
-
   /**
     * @param gridRequest grid request params
     * @return grid result for user management grid
     */
   def fetchUsersGridData(gridRequest: GridRequest): Future[GridResponse[UserManagementModel]] = {
+    import MyPostgresProfile.api._
     import utils.DynamicGridQuerySupport.GridQuerySupportImplicits
 
     val baseQuery = slickUsers.filterOpt(gridRequest.filter)((user, key) => (user.firstName like s"%$key%") ||
@@ -25,35 +24,49 @@ class UserManagementDAO @Inject() (protected val dbConfigProvider: DatabaseConfi
       (user.email like s"%$key%")
     )
       .join(slickUserLoginInfos).on(_.id === _.userID)
-      .joinLeft(slickLoginInfos).on((q, li) => q._2.loginInfoId === li.id && li.providerID === CredentialsProvider.ID)
-      .joinLeft(slickLoginInfos).on((q, li) => q._1._2.loginInfoId === li.id && li.providerID === GoogleProvider.ID)
-      .joinLeft(slickLoginInfos).on((q, li) => q._1._1._2.loginInfoId === li.id && li.providerID === FacebookProvider.ID)
-      .joinLeft(slickLoginInfos).on((q, li) => q._1._1._1._2.loginInfoId === li.id && li.providerID === TwitterProvider.ID)
+      .joinLeft(slickLoginInfos).on((q, li) => q._2.loginInfoId === li.id)
+      .groupBy {
+        case ((u, _), _) => u
+      }
+      .map {
+        case (u, group) =>
+          (u, group.map(_._2.map(_.providerID)).arrayAgg[String])
+      }
 
     val gridQuery = baseQuery.toGridQuery.withSortableColumns {
       case "email" => {
-        case (((((u, _), _), _), _), _) => u.email
+        case (u, _) => u.email
       }
       case "lastName" => {
-        case (((((u, _), _), _), _), _) => u.lastName
+        case (u, _) => u.lastName
       }
       case "firstName" => {
-        case (((((u, _), _), _), _), _) => u.firstName
+        case (u, _) => u.firstName
       }
       case "role" => {
-        case (((((u, _), _), _), _), _) => u.roleId
+        case (u, _) => u.roleId
       }
       case "signedUpAt" => {
-        case (((((u, _), _), _), _), _) => u.signedUpAt
+        case (u, _) => u.signedUpAt
       }
     }
 
     runGridQuery(gridQuery, gridRequest).map { gridResponse =>
 
       val userManagementModelData = gridResponse.data.map {
-        case (((((u, _), cred), google), fb), twitter) =>
-          UserManagementModel(u.userID, u.firstName, u.lastName, u.email, u.roleId, u.activated, u.signedUpAt,
-            cred.isDefined, google.isDefined, fb.isDefined, twitter.isDefined)
+        case (u, providerIds) =>
+          UserManagementModel(
+            u.userID,
+            u.firstName,
+            u.lastName,
+            u.email,
+            u.roleId,
+            u.activated,
+            u.signedUpAt,
+            providerIds.contains(CredentialsProvider.ID),
+            providerIds.contains(GoogleProvider.ID),
+            providerIds.contains(FacebookProvider.ID),
+            providerIds.contains(TwitterProvider.ID))
       }
 
       gridResponse.copy(data = userManagementModelData)
