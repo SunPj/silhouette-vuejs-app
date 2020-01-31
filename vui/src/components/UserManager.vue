@@ -106,7 +106,7 @@
                 })
                     .then(({data}) => {
                         this.data = data.data;
-                        this.total = data.recordsFiltered;
+                        this.total = data.recordsTotal;
                         this.loading = false
                     })
                     .catch((error) => {
