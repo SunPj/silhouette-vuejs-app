@@ -1,11 +1,9 @@
 <template>
     <div>
-        <div class="container">
-            <nav-bar></nav-bar>
-        </div>
+        <nav-bar></nav-bar>
 
         <section class="section">
-            <div class="container">
+            <div class="container is-fluid">
                 <router-view/>
             </div>
         </section>
