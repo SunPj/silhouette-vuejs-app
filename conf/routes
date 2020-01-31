@@ -7,11 +7,16 @@ GET         /signOut                         controllers.ApplicationController.s
 POST        /signIn                          controllers.SignInController.submit
 POST        /signUp                          controllers.SignUpController.submit
 GET         /authenticate/:provider          controllers.SocialAuthController.authenticate(provider)
+GET         /link-account/:provider          controllers.SocialAuthController.linkAccount(provider)
 POST        /password/forgot                 controllers.ForgotPasswordController.submit
 POST        /password/reset/:token           controllers.ResetPasswordController.submit(token: java.util.UUID)
 POST        /password/change                 controllers.ChangePasswordController.submit
 GET         /account/email/:email            controllers.ActivateAccountController.send(email: String)
 GET         /account/activate/:token         controllers.ActivateAccountController.activate(token: java.util.UUID)
+
+
+# Returns a list of linked accounts for user
+GET         /api/user/:userId/linked-accounts    controllers.UserController.fetchLinkedAccounts(userId: java.util.UUID)
 
 ### User management
 # Returns a list of all availalble user roles

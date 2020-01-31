@@ -66,4 +66,23 @@ class SocialAuthController @Inject()(components: ControllerComponents,
         Redirect("/error?message=socialAuthFailed")
     }
   }
+
+  def linkAccount(provider: String) = silhouette.SecuredAction.async { implicit req =>
+    (socialProviderRegistry.get[SocialProvider](provider) match {
+      case Some(p: SocialProvider with CommonSocialProfileBuilder) =>
+        p.authenticate().flatMap {
+          case Left(result) =>
+            Future.successful(result)
+          case Right(authInfo) =>  for {
+            profile <- p.retrieveProfile(authInfo)
+            _ <- authenticateService.addAuthenticateMethod(req.identity.userID, profile.loginInfo, authInfo)
+          } yield Ok
+        }
+      case _ => Future.failed(new ProviderException(s"Cannot authenticate with unexpected social provider $provider"))
+    }).recover {
+      case e: ProviderException =>
+        logger.error("Unexpected provider error", e)
+        Redirect("/error?message=socialAuthFailed")
+    }
+  }
 }
