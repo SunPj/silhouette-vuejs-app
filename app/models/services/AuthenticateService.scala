@@ -127,6 +127,14 @@ class AuthenticateService @Inject()(credentialsProvider: CredentialsProvider,
   def userHasAuthenticationMethod(userId: UUID, providerId: String): Future[Boolean] = {
     loginInfoDAO.find(userId, providerId).map(_.nonEmpty)
   }
+
+  /**
+    * Get list of providers of user authentication methods
+    *
+    * @param email user email
+    * @return
+    */
+  def getAuthenticationProviders(email: String): Future[Seq[String]] = loginInfoDAO.getAuthenticationProviders(email)
 }
 
 sealed trait AuthenticateResult
