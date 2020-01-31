@@ -5,6 +5,10 @@
         <table class="table is-fullwidth">
             <tbody>
             <tr>
+                <td>1/31/20</td>
+                <td>User can link multiple sources (credentials, social providers) to his account</td>
+            </tr>
+            <tr>
                 <td>1/24/20</td>
                 <td>Password brute force protection (Default is 5 tries per 30 minutes, but can be configured)</td>
             </tr>

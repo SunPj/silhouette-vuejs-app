@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+  <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
       <router-link to="/" class="navbar-item">
         <img src="../assets/logo.png">
@@ -14,6 +14,7 @@
 
     <div id="navbarBasicExample" class="navbar-menu">
       <div class="navbar-start">
+        <router-link to="/" exact class="navbar-item">Features</router-link>
         <router-link to="/todo" class="navbar-item">Todo</router-link>
         <router-link to="/changelog" class="navbar-item">Changelog</router-link>
         <router-link to="/about" class="navbar-item">About</router-link>

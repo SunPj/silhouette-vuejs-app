@@ -19,6 +19,7 @@ if there is no activity for some time.
 * Basic user management functionality (admin page, user roles) 
 * ReCaptcha integration (signup form)
 * Password brute force protection (Default is 5 tries per 30 minutes, but can be configured)
+* User can link multiple sources (credentials, social providers) to his account
 
 ## Backend technical details:
 * PlayFramework (Scala)

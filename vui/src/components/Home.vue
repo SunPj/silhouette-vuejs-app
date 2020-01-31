@@ -19,6 +19,7 @@
                 <li>Recaptcha</li>
                 <li>Password brute force protection (Default is 5 tries per 30 minutes, but can be configured)</li>
                 <li>Basic user management functionality (admin page, user roles)</li>
+                <li>Supporting multiple sources (credentials, social providers) bound to single account</li>
             </ul>
 
             <h3 class="is-3">Backend technical details:</h3>
