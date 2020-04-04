@@ -1,18 +1,29 @@
 <template>
-    <div class="container">
-        <ul class="admin-menu">
-            <li>
-                <router-link :to="{name: 'home'}">&larr; Back to site</router-link>
-            </li>
-            <li>
-                <router-link to="/admin/user">User management</router-link>
-            </li>
-            <li>
-                <router-link to="/admin/other">Other page sample</router-link>
-            </li>
-        </ul>
-        <router-view/>
-    </div>
+    <section>
+        <b-sidebar
+                type="is-light"
+                :fullheight="true"
+                :open="true">
+            <div class="p-1">
+                <img src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
+                     alt="Lightweight UI components for Vue.js based on Bulma"/>
+                <b-menu>
+                    <b-menu-list label="Menu">
+                        <b-menu-item label="Users" icon="account" tag="router-link" to="/admin/user"></b-menu-item>
+                        <b-menu-item label="Other" icon="account" tag="router-link" to="/admin/other"></b-menu-item>
+                    </b-menu-list>
+                    <b-menu-list label="Actions">
+                        <b-menu-item label="Back to site" tag="router-link" :to="{name: 'home'}" exact></b-menu-item>
+                    </b-menu-list>
+                </b-menu>
+            </div>
+        </b-sidebar>
+        <div class="block">
+            <div class="container admin-container">
+                <router-view/>
+            </div>
+        </div>
+    </section>
 </template>
 
 <script>
@@ -22,27 +33,13 @@
 </script>
 
 <style>
-    .admin-menu {
+    .p-1 {
+        padding: 1em;
+    }
+
+    .admin-container {
         text-align: center;
-        padding-bottom: 20px;
-    }
-
-    .router-link-active {
-        font-weight: bold;
-    }
-
-    .admin-menu ul {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .admin-menu li {
-        display: inline-block;
-        margin: 0 10px;
-    }
-
-    .admin-menu a {
-        color: #42b983;
+        padding-top: 20px;
     }
 </style>
 
