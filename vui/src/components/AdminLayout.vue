@@ -5,8 +5,7 @@
                 :fullheight="true"
                 :open="true">
             <div class="p-1">
-                <img src="https://raw.githubusercontent.com/buefy/buefy/dev/static/img/buefy-logo.png"
-                     alt="Lightweight UI components for Vue.js based on Bulma"/>
+                <img src="../assets/buefy-logo.png" alt="Lightweight UI components for Vue.js based on Bulma"/>
                 <b-menu>
                     <b-menu-list label="Menu">
                         <b-menu-item label="Users" icon="account" tag="router-link" to="/admin/user"></b-menu-item>
