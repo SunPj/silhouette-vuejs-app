@@ -81,3 +81,4 @@ Hot
 ### Running in production
 1. Build frontend code `npm run build`
 2. Compile play application for production `sbt compile stage` (frontend resources will be copied) 
+3. Make sure you have all ENV params specified in application.conf such as JDBC_DATABASE_URL, DATABASE_USER, DATABASE_PWD, SENDGRID_API_KEY, RECAPTCHA_SECRETKEY, etc before running the app.
