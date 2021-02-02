@@ -3,6 +3,10 @@
         <h1 class="title is-2">Todo</h1>
         <ol type="1">
             <li>Test heroku autodeployment</li>
+            <li>Upate Silhouette</li>
+            <li>User timezone support</li>
+            <li>User ban functionality</li>
+            <li>Tracking user login</li>
             <li>CRM integration sample (HubSpot, ActiveCampaign, etc)</li>
         </ol>
 
