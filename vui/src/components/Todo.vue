@@ -7,6 +7,7 @@
             <li>User timezone support</li>
             <li>User ban functionality</li>
             <li>Tracking user login</li>
+            <li>Log out user when JWT expires</li>
             <li>CRM integration sample (HubSpot, ActiveCampaign, etc)</li>
         </ol>
 
