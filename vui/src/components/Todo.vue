@@ -7,6 +7,7 @@
             <li>User timezone support</li>
             <li>User ban functionality</li>
             <li>Tracking user login</li>
+            <li>User can link or unlink Social accounts in his profile. Social account are not connected automatically on sign up is email already exists for security purposes</li>
             <li>Bruteforce protection. Ban IP, email after N tries. Use redis and inmemory implementations.</li>
             <li>Invalidate user JWT when user logouts, so it can't be used later on</li>
             <li>Log out user when JWT expires</li>
