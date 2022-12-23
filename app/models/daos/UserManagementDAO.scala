@@ -1,8 +1,8 @@
 package models.daos
 
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
-import com.mohiva.play.silhouette.impl.providers.oauth1.TwitterProvider
-import com.mohiva.play.silhouette.impl.providers.oauth2.{FacebookProvider, GoogleProvider}
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.CredentialsProvider
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.oauth1.TwitterProvider
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.oauth2.{FacebookProvider, GoogleProvider}
 import javax.inject.Inject
 import models.UserManagementModel
 import play.api.db.slick.DatabaseConfigProvider

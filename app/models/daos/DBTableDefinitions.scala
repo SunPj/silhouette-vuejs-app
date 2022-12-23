@@ -3,7 +3,7 @@ package models.daos
 import java.time.ZonedDateTime
 import java.util.UUID
 
-import com.mohiva.play.silhouette.api.LoginInfo
+import io.github.honeycombcheesecake.play.silhouette.api.LoginInfo
 import models.{AuthToken, User, UserRoles}
 import slick.jdbc.JdbcProfile
 import slick.lifted.ProvenShape.proveShapeOf
@@ -21,13 +21,13 @@ trait DBTableDefinitions {
     def id = column[UUID]("id", O.PrimaryKey)
     def userId = column[UUID]("user_id")
     def expiry = column[ZonedDateTime]("expiry")
-    def * = (id, userId, expiry) <> (AuthToken.tupled, AuthToken.unapply)
+    def * = (id, userId, expiry).mapTo[AuthToken]
   }
 
   class UserRoles(tag: Tag) extends Table[DBUserRole](tag, Some("auth"), "role") {
     def id = column[Int]("id", O.PrimaryKey)
     def name = column[String]("name")
-    def * = (id, name) <> (DBUserRole.tupled, DBUserRole.unapply)
+    def * = (id, name).mapTo[DBUserRole]
   }
 
   case class DBUser(userID: UUID,
@@ -55,7 +55,7 @@ trait DBTableDefinitions {
     def activated = column[Boolean]("activated")
     def roleId = column[Int]("role_id")
     def signedUpAt = column[ZonedDateTime]("signed_up_at")
-    def * = (id, firstName, lastName, email, avatarURL, activated, roleId, signedUpAt) <> ((DBUser.apply _).tupled, DBUser.unapply)
+    def * = (id, firstName, lastName, email, avatarURL, activated, roleId, signedUpAt).mapTo[DBUser]
   }
 
   case class DBLoginInfo(id: Option[Long], providerID: String, providerKey: String)
@@ -68,7 +68,7 @@ trait DBTableDefinitions {
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
     def providerID = column[String]("provider_id")
     def providerKey = column[String]("provider_key")
-    def * = (id.?, providerID, providerKey) <> ((DBLoginInfo.apply _).tupled, DBLoginInfo.unapply)
+    def * = (id.?, providerID, providerKey).mapTo[DBLoginInfo]
   }
 
   case class DBUserLoginInfo(
@@ -79,7 +79,7 @@ trait DBTableDefinitions {
   class UserLoginInfos(tag: Tag) extends Table[DBUserLoginInfo](tag, Some("auth"), "user_login_info") {
     def userID = column[UUID]("user_id")
     def loginInfoId = column[Long]("login_info_id")
-    def * = (userID, loginInfoId) <> (DBUserLoginInfo.tupled, DBUserLoginInfo.unapply)
+    def * = (userID, loginInfoId).mapTo[DBUserLoginInfo]
   }
 
   case class DBPasswordInfo(
@@ -94,7 +94,7 @@ trait DBTableDefinitions {
     def password = column[String]("password")
     def salt = column[Option[String]]("salt")
     def loginInfoId = column[Long]("login_info_id")
-    def * = (hasher, password, salt, loginInfoId) <> (DBPasswordInfo.tupled, DBPasswordInfo.unapply)
+    def * = (hasher, password, salt, loginInfoId).mapTo[DBPasswordInfo]
   }
 
   case class DBOAuth1Info(
@@ -109,7 +109,7 @@ trait DBTableDefinitions {
     def token = column[String]("token")
     def secret = column[String]("secret")
     def loginInfoId = column[Long]("login_info_id")
-    def * = (id.?, token, secret, loginInfoId) <> (DBOAuth1Info.tupled, DBOAuth1Info.unapply)
+    def * = (id.?, token, secret, loginInfoId).mapTo[DBOAuth1Info]
   }
 
   case class DBOAuth2Info(
@@ -128,7 +128,7 @@ trait DBTableDefinitions {
     def expiresIn = column[Option[Int]]("expires_in")
     def refreshToken = column[Option[String]]("refresh_token")
     def loginInfoId = column[Long]("login_info_id")
-    def * = (id.?, accessToken, tokenType, expiresIn, refreshToken, loginInfoId) <> (DBOAuth2Info.tupled, DBOAuth2Info.unapply)
+    def * = (id.?, accessToken, tokenType, expiresIn, refreshToken, loginInfoId).mapTo[DBOAuth2Info]
   }
 
 

@@ -4,9 +4,9 @@ import java.time.Instant
 import java.util.UUID
 
 import akka.actor.ActorRef
-import com.mohiva.play.silhouette.api.util.Credentials
-import com.mohiva.play.silhouette.impl.exceptions.{IdentityNotFoundException, InvalidPasswordException}
-import com.mohiva.play.silhouette.impl.providers._
+import io.github.honeycombcheesecake.play.silhouette.api.util.Credentials
+import io.github.honeycombcheesecake.play.silhouette.impl.exceptions.{IdentityNotFoundException, InvalidPasswordException}
+import io.github.honeycombcheesecake.play.silhouette.impl.providers._
 import javax.inject.{Inject, Named}
 import models.User
 import models.services.BruteForceDefenderActor._
@@ -14,8 +14,8 @@ import models.services.BruteForceDefenderActor._
 import scala.concurrent.duration._
 import akka.pattern.ask
 import akka.util.Timeout
-import com.mohiva.play.silhouette.api.{AuthInfo, LoginInfo}
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
+import io.github.honeycombcheesecake.play.silhouette.api.{AuthInfo, LoginInfo}
+import io.github.honeycombcheesecake.play.silhouette.api.repositories.AuthInfoRepository
 import models.daos.LoginInfoDAO
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -61,6 +61,8 @@ class AuthenticateService @Inject()(credentialsProvider: CredentialsProvider,
         }
       case SignInForbidden(nextSignInAllowedAt) =>
         Future.successful(ToManyAuthenticateRequests(nextSignInAllowedAt))
+      case _ =>
+        Future.failed(new RuntimeException("System error")) // TODO make this nicer
     }
   }
 

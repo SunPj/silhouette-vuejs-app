@@ -2,10 +2,10 @@ package models.services
 
 import java.util.UUID
 
-import com.mohiva.play.silhouette.api.services.AvatarService
-import com.mohiva.play.silhouette.api.util.PasswordHasherRegistry
-import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import io.github.honeycombcheesecake.play.silhouette.api.services.AvatarService
+import io.github.honeycombcheesecake.play.silhouette.api.util.PasswordHasherRegistry
+import io.github.honeycombcheesecake.play.silhouette.api.LoginInfo
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.CredentialsProvider
 import javax.inject.Inject
 import models.services.captcha.CaptchaService
 import models.User

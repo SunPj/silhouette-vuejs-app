@@ -2,7 +2,7 @@ package controllers
 
 import java.util.UUID
 
-import com.mohiva.play.silhouette.api.Silhouette
+import io.github.honeycombcheesecake.play.silhouette.api.Silhouette
 import forms.UserRoleForm
 import javax.inject.Inject
 import models.UserRoles
@@ -43,6 +43,6 @@ class UserManagerController @Inject()(components: ControllerComponents,
     * @return a list of user roles
     */
   def userRoles() = silhouette.SecuredAction(HasRole(UserRoles.Admin)) {
-    Ok(Json.toJson(UserRoles.values.map(v => Json.obj("name" -> v.toString, "id" -> v.id))))
+    Ok(Json.toJson(UserRoles.values.unsorted.map(v => Json.obj("name" -> v.toString, "id" -> v.id))))
   }
 }

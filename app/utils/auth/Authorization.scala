@@ -1,7 +1,7 @@
 package utils.auth
 
-import com.mohiva.play.silhouette.api.Authorization
-import com.mohiva.play.silhouette.impl.authenticators.JWTAuthenticator
+import io.github.honeycombcheesecake.play.silhouette.api.Authorization
+import io.github.honeycombcheesecake.play.silhouette.impl.authenticators.JWTAuthenticator
 import models.User
 import models.UserRoles.UserRole
 import play.api.mvc.Request

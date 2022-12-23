@@ -2,7 +2,7 @@ package models.daos
 
 import java.util.UUID
 
-import com.mohiva.play.silhouette.api.LoginInfo
+import io.github.honeycombcheesecake.play.silhouette.api.LoginInfo
 import models.User
 
 import scala.concurrent.Future

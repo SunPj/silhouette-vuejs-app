@@ -1,8 +1,8 @@
 package controllers
 
 import javax.inject.Inject
-import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import io.github.honeycombcheesecake.play.silhouette.api._
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.CredentialsProvider
 import forms.ForgotPasswordForm
 import models.services.{AuthTokenService, MailService, UserService}
 import play.api.mvc._
@@ -35,7 +35,7 @@ class ForgotPasswordController @Inject()(components: ControllerComponents,
     * @return The result to display.
     */
   def submit = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    ForgotPasswordForm.form.bindFromRequest.fold(
+    ForgotPasswordForm.form.bindFromRequest().fold(
       _ => Future.successful(BadRequest),
       email => {
         val loginInfo = LoginInfo(CredentialsProvider.ID, email)
@@ -48,7 +48,7 @@ class ForgotPasswordController @Inject()(components: ControllerComponents,
 
               Ok
             }
-          case None => Future.successful(Ok)
+          case _ => Future.successful(Ok)
         }
       }
     )

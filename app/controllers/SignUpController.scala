@@ -3,7 +3,7 @@ package controllers
 import java.util.UUID
 
 import javax.inject.Inject
-import com.mohiva.play.silhouette.api._
+import io.github.honeycombcheesecake.play.silhouette.api._
 import forms.SignUpForm
 import models.services._
 import play.api.i18n.I18nSupport
@@ -30,7 +30,7 @@ class SignUpController @Inject()(components: ControllerComponents,
     * @return The result to display.
     */
   def submit = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    SignUpForm.form.bindFromRequest.fold(
+    SignUpForm.form.bindFromRequest().fold(
       _ => Future.successful(BadRequest),
       data => {
         val activationUrlProvider: UUID => String = authTokenId => routes.ActivateAccountController.activate(authTokenId).absoluteURL()

@@ -4,7 +4,6 @@ import com.github.tminglei.slickpg._
 import play.api.libs.json.{JsValue, Json}
 import slick.basic.Capability
 import slick.jdbc.JdbcCapabilities
-import scala.language.higherKinds
 
 trait MyPostgresProfile extends ExPostgresProfile
   with PgArraySupport

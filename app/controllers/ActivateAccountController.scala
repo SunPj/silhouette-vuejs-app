@@ -4,8 +4,8 @@ import java.net.URLDecoder
 import java.util.UUID
 
 import javax.inject.Inject
-import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import io.github.honeycombcheesecake.play.silhouette.api._
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.CredentialsProvider
 import models.services.{AuthTokenService, MailService, UserService}
 import play.api.mvc.{AbstractController, ControllerComponents}
 import utils.auth.DefaultEnv
@@ -44,7 +44,7 @@ class ActivateAccountController @Inject()(components: ControllerComponents,
           mailService.sendActivateAccountEmail(decodedEmail, route.absoluteURL())
           Ok
         }
-      case None => Future.successful(Ok)
+      case _ => Future.successful(Ok)
     }
   }
 

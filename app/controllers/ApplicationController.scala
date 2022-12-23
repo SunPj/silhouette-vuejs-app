@@ -1,8 +1,8 @@
 package controllers
 
-import com.mohiva.play.silhouette.api.actions.SecuredRequest
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.{LogoutEvent, Silhouette}
+import io.github.honeycombcheesecake.play.silhouette.api.actions.SecuredRequest
+import io.github.honeycombcheesecake.play.silhouette.api.repositories.AuthInfoRepository
+import io.github.honeycombcheesecake.play.silhouette.api.{LogoutEvent, Silhouette}
 import javax.inject.Inject
 import models.services.IndexRenderService
 import play.api.{Environment, Mode}

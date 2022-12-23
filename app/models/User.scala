@@ -2,7 +2,7 @@ package models
 
 import java.util.UUID
 
-import com.mohiva.play.silhouette.api.Identity
+import io.github.honeycombcheesecake.play.silhouette.api.Identity
 
 /**
   * The user object.

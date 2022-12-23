@@ -2,24 +2,24 @@ package modules
 
 import com.google.inject.name.Named
 import com.google.inject.{AbstractModule, Provides}
-import com.mohiva.play.silhouette.api.crypto._
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.services._
-import com.mohiva.play.silhouette.api.util._
-import com.mohiva.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
-import com.mohiva.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings, JcaSigner, JcaSignerSettings}
-import com.mohiva.play.silhouette.impl.authenticators._
-import com.mohiva.play.silhouette.impl.providers._
-import com.mohiva.play.silhouette.impl.providers.oauth1._
-import com.mohiva.play.silhouette.impl.providers.oauth1.secrets.{CookieSecretProvider, CookieSecretSettings}
-import com.mohiva.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service
-import com.mohiva.play.silhouette.impl.providers.oauth2._
-import com.mohiva.play.silhouette.impl.providers.state.{CsrfStateItemHandler, CsrfStateSettings}
-import com.mohiva.play.silhouette.impl.services._
-import com.mohiva.play.silhouette.impl.util._
-import com.mohiva.play.silhouette.password.{BCryptPasswordHasher, BCryptSha256PasswordHasher}
-import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
-import com.mohiva.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
+import io.github.honeycombcheesecake.play.silhouette.api.crypto._
+import io.github.honeycombcheesecake.play.silhouette.api.repositories.AuthInfoRepository
+import io.github.honeycombcheesecake.play.silhouette.api.services._
+import io.github.honeycombcheesecake.play.silhouette.api.util._
+import io.github.honeycombcheesecake.play.silhouette.api.{Environment, EventBus, Silhouette, SilhouetteProvider}
+import io.github.honeycombcheesecake.play.silhouette.crypto.{JcaCrypter, JcaCrypterSettings, JcaSigner, JcaSignerSettings}
+import io.github.honeycombcheesecake.play.silhouette.impl.authenticators._
+import io.github.honeycombcheesecake.play.silhouette.impl.providers._
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.oauth1._
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.oauth1.secrets.{CookieSecretProvider, CookieSecretSettings}
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.oauth1.services.PlayOAuth1Service
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.oauth2._
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.state.{CsrfStateItemHandler, CsrfStateSettings}
+import io.github.honeycombcheesecake.play.silhouette.impl.services._
+import io.github.honeycombcheesecake.play.silhouette.impl.util._
+import io.github.honeycombcheesecake.play.silhouette.password.{BCryptPasswordHasher, BCryptSha256PasswordHasher}
+import io.github.honeycombcheesecake.play.silhouette.persistence.daos.DelegableAuthInfoDAO
+import io.github.honeycombcheesecake.play.silhouette.persistence.repositories.DelegableAuthInfoRepository
 import com.typesafe.config.Config
 import models.daos._
 import models.services.{UserService, UserServiceImpl}
@@ -63,7 +63,7 @@ class SilhouetteModule extends AbstractModule with ScalaModule {
   /**
     * Configures the module.
     */
-  override def configure() {
+  override def configure(): Unit = {
     bind[Silhouette[DefaultEnv]].to[SilhouetteProvider[DefaultEnv]]
     bind[UserService].to[UserServiceImpl]
     bind[UserDAO].to[UserDAOImpl]

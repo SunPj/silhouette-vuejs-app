@@ -20,9 +20,9 @@ class BruteForceDefenderActor @Inject()(conf: BruteForceDefenderConf)(implicit e
 
   override def preStart(): Unit = {
     import scala.concurrent.duration._
-    scheduler = context.system.scheduler.schedule(
+    scheduler = context.system.scheduler.scheduleWithFixedDelay(
       initialDelay = 1 second,
-      interval = conf.period,
+      delay = conf.period,
       receiver = self,
       message = Reset
     )

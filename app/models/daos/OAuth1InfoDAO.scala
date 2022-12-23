@@ -1,8 +1,8 @@
 package models.daos
 
-import com.mohiva.play.silhouette.api.LoginInfo
-import com.mohiva.play.silhouette.impl.providers.OAuth1Info
-import com.mohiva.play.silhouette.persistence.daos.DelegableAuthInfoDAO
+import io.github.honeycombcheesecake.play.silhouette.api.LoginInfo
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.OAuth1Info
+import io.github.honeycombcheesecake.play.silhouette.persistence.daos.DelegableAuthInfoDAO
 import javax.inject.Inject
 import play.api.db.slick.DatabaseConfigProvider
 

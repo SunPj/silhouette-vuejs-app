@@ -1,11 +1,11 @@
 package controllers
 
 import javax.inject.Inject
-import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.exceptions.ProviderException
-import com.mohiva.play.silhouette.api.repositories.AuthInfoRepository
-import com.mohiva.play.silhouette.api.util.Clock
-import com.mohiva.play.silhouette.impl.providers._
+import io.github.honeycombcheesecake.play.silhouette.api._
+import io.github.honeycombcheesecake.play.silhouette.api.exceptions.ProviderException
+import io.github.honeycombcheesecake.play.silhouette.api.repositories.AuthInfoRepository
+import io.github.honeycombcheesecake.play.silhouette.api.util.Clock
+import io.github.honeycombcheesecake.play.silhouette.impl.providers._
 import models.services._
 import play.api.Configuration
 import play.api.libs.json.Json

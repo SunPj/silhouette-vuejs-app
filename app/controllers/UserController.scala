@@ -2,7 +2,7 @@ package controllers
 
 import java.util.UUID
 
-import com.mohiva.play.silhouette.api.Silhouette
+import io.github.honeycombcheesecake.play.silhouette.api.Silhouette
 import javax.inject.Inject
 import models.services.AuthenticateService
 import play.api.libs.json.Json

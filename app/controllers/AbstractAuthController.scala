@@ -1,9 +1,9 @@
 package controllers
 
-import com.mohiva.play.silhouette.api.Authenticator.Implicits._
-import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.services.AuthenticatorResult
-import com.mohiva.play.silhouette.api.util.Clock
+import io.github.honeycombcheesecake.play.silhouette.api.Authenticator.Implicits._
+import io.github.honeycombcheesecake.play.silhouette.api._
+import io.github.honeycombcheesecake.play.silhouette.api.services.AuthenticatorResult
+import io.github.honeycombcheesecake.play.silhouette.api.util.Clock
 import models.User
 import net.ceedubs.ficus.Ficus._
 import play.api.Configuration

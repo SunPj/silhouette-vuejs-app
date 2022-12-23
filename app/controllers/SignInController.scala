@@ -1,9 +1,10 @@
 package controllers
 
-import com.mohiva.play.silhouette.api._
-import com.mohiva.play.silhouette.api.util.Clock
-import com.mohiva.play.silhouette.impl.providers.CredentialsProvider
+import io.github.honeycombcheesecake.play.silhouette.api._
+import io.github.honeycombcheesecake.play.silhouette.impl.providers.CredentialsProvider
 import forms.SignInForm
+import io.github.honeycombcheesecake.play.silhouette.api.util.Clock
+
 import javax.inject.Inject
 import models.services._
 import play.api.Configuration
@@ -33,7 +34,7 @@ class SignInController @Inject()(authenticateService: AuthenticateService,
     * @return The result to display.
     */
   def submit = silhouette.UnsecuredAction.async { implicit request: Request[AnyContent] =>
-    SignInForm.form.bindFromRequest.fold(
+    SignInForm.form.bindFromRequest().fold(
       _ => Future.successful(BadRequest),
       data => {
         authenticateService.credentials(data.email, data.password).flatMap {
